@@ -1,6 +1,7 @@
 package ch.epl.tchu.game;
 
 import java.util.List;
+//i have a huge distaste for bad jokes
 
 public enum Card {
 
