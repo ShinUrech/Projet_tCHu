@@ -3,6 +3,12 @@ package ch.epl.tchu.game;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * enum to represent all types of cards
+ *
+ * @author Shin Urech (327245)
+ */
+
 public enum Card {
 
     BLACK,
@@ -15,15 +21,25 @@ public enum Card {
     WHITE,
     LOCOMOTIVE;
 
+    /**
+     * list of all the different kinds of cards that are required to play the game except
+     * locmotives (CarList() is defined below and it allows us to creat a list of all cards without
+     * locomotives)
+     *
+     */
     public static final List<Card> CARS = CarList();
+
+    /**
+     * this method counts the number of cards in the list CARS
+     */
     public static final int COUNT = CARS.size();
+
 
     private final Color cardColor;
 
-
-    /*Card constructor. In order to make it work you have to use the name of
-    the card you wanna build */
-
+    /**
+     * this constructor is associating each card to each color
+     */
     Card(){
         switch(this) {
 
@@ -68,6 +84,11 @@ public enum Card {
         }
     }
 
+    /**
+     * this method returns the tye of card according to which color we choose
+     * @param color
+     * @return
+     */
     public static Card of(Color color){
 
         Card cardType;
@@ -118,6 +139,10 @@ public enum Card {
 
     }
 
+    /**
+     * this method returns the color of a chosen card
+     * @return cardColor
+     */
     public Color color(){
         return cardColor;
     }

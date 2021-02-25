@@ -25,7 +25,7 @@ public final class Trip {
     public static List<Trip> all(List<Station> from, List<Station> to, int points){
 
         List<Trip> allTrips = new ArrayList<Trip>();
-        Preconditions.checkArgument(from != null && to != null && points > 0);
+        Preconditions.checkArgument(!from.isEmpty() && to != null && points > 0);
 
         for(Station a : from){
             for(Station b : to){
