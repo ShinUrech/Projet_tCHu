@@ -11,15 +11,15 @@ import java.util.List;
 
 public enum Card {
 
-    BLACK,
-    VIOLET,
-    BLUE,
-    GREEN,
-    YELLOW,
-    ORANGE,
-    RED,
-    WHITE,
-    LOCOMOTIVE;
+    BLACK(Color.BLACK),
+    VIOLET(Color.VIOLET),
+    BLUE(Color.BLUE),
+    GREEN(Color.GREEN),
+    YELLOW(Color.YELLOW),
+    ORANGE(Color.ORANGE),
+    RED(Color.RED),
+    WHITE(Color.WHITE),
+    LOCOMOTIVE(null);
 
 
     /**
@@ -45,48 +45,8 @@ public enum Card {
     /**
      * this constructor is associating each card to each color.
      */
-   Card(){
-        switch(this) {
-
-            case BLACK:
-                cardColor = Color.BLACK;
-                break;
-
-            case VIOLET:
-                cardColor = Color.VIOLET;
-                break;
-
-            case BLUE:
-                cardColor = Color.BLUE;
-                break;
-
-            case GREEN:
-                cardColor = Color.GREEN;
-                break;
-
-            case YELLOW:
-                cardColor = Color.YELLOW;
-                break;
-
-            case ORANGE:
-                cardColor = Color.ORANGE;
-                break;
-
-            case RED:
-                cardColor = Color.RED;
-                break;
-
-            case WHITE:
-                cardColor = Color.WHITE;
-                break;
-
-            case LOCOMOTIVE:
-                cardColor = Color.WHITE;
-                break;
-
-            default:
-                cardColor = null;
-        }
+   private Card(Color cardColor){
+        this.cardColor = cardColor;
     }
 
     /**

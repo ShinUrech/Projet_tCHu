@@ -26,8 +26,8 @@ public final class Ticket implements Comparable<Ticket> {
     public Ticket(List<Trip> trips){
 
         Preconditions.checkArgument(!trips.isEmpty());
-        for(Trip a : trips){
-            if(a.from() != trips.get(0).from()){
+        for(int a = 0; a < trips.size(); a++){
+            if(trips.get(0).from() != trips.get(a).from()){
                 throw new IllegalArgumentException();
             }
         }
@@ -62,17 +62,18 @@ public final class Ticket implements Comparable<Ticket> {
     private static String computeText(List<Trip> trips){
 
         TreeSet<String> allStations = new TreeSet<String>();
-        String finalText = trips.get(0).from().toString();
+        String finalText = "";
 
         for (Trip a :trips){
-            allStations.add(a.to().toString() + String.format(" (% s)", a.points()));
+            allStations.add(a.to().toString() + String.format(" (%s)", a.points()));
         }
 
-        finalText += String.join(",", allStations);
+        finalText += String.join(", ", allStations);
 
         if(allStations.size() != 1){
             finalText = "{" + finalText + "}";
         }
+        finalText = trips.get(0).from().toString() + " - " + finalText;
 
         return finalText;
     }
