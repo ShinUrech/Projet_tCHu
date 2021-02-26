@@ -1,4 +1,4 @@
-package ch.epl.tchu.game;
+package ch.epfl.tchu.game;
 
 import java.util.List;
 
@@ -18,8 +18,7 @@ public enum Color {
     YELLOW,
     ORANGE,
     RED,
-    WHITE,
-    NULL;
+    WHITE;
 
     /**
      * list of all possible colors
@@ -30,6 +29,11 @@ public enum Color {
      * returns the amount of available colors
      */
     public static final int COUNT = ALL.size();
+
+    /**
+     * Default constructor for Color class.
+     */
+    Color(){}
 
     }
 

@@ -1,6 +1,6 @@
-package ch.epl.tchu.game;
+package ch.epfl.tchu.game;
 
-import ch.epl.tchu.Preconditions;
+import ch.epfl.tchu.Preconditions;
 
 /**
  * A class to represent a Station.

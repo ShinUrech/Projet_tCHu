@@ -1,4 +1,4 @@
-package ch.epl.tchu.game;
+package ch.epfl.tchu.game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,17 +21,23 @@ public enum Card {
     WHITE,
     LOCOMOTIVE;
 
+
     /**
-     * list of all the different kinds of cards that are required to play the game except
-     * locomotives (CarList() is defined below and it allows us to create a list of all
-     * cards without locomotives).
+     * list of all possible cards
      */
-    public static final List<Card> CARS = CarList();
+    public static final List<Card> ALL = List.of(Card.values());
 
     /**
      * this attribute counts the number of cards in the list CARS.
      */
-    public static final int COUNT = CARS.size();
+    public static final int COUNT = ALL.size();
+
+    /**
+     * list of all the different kinds of cards that are required to play the ch.epfl.tchu.game except
+     * locomotives (CarList() is defined below and it allows us to create a list of all
+     * cards without locomotives).
+     */
+    public static final List<Card> CARS = CarList();
 
 
     private final Color cardColor;
@@ -39,7 +45,7 @@ public enum Card {
     /**
      * this constructor is associating each card to each color.
      */
-    Card(){
+   Card(){
         switch(this) {
 
             case BLACK:
@@ -75,7 +81,7 @@ public enum Card {
                 break;
 
             case LOCOMOTIVE:
-                cardColor = Color.NULL;
+                cardColor = Color.WHITE;
                 break;
 
             default:
@@ -129,12 +135,8 @@ public enum Card {
             cardType = WHITE;
             break;
 
-        case NULL:
-            cardType = LOCOMOTIVE;
-            break;
-
         default:
-            cardType = null;
+            cardType = LOCOMOTIVE;
         }
 
         return cardType;

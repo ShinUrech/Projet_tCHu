@@ -1,4 +1,4 @@
-package ch.epl.tchu.game;
+package ch.epfl.tchu.game;
 
 /**
  * An interface to evaluate if two stations are connected.

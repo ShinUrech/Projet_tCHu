@@ -1,4 +1,4 @@
-package ch.epl.tchu;
+package ch.epfl.tchu;
 
 /**
  * method that simplifies the testing of preconditions.
