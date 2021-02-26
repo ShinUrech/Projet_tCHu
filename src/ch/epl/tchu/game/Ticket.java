@@ -6,14 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * A class to represent a ticket.
+ *
+ * @author Aidas Venckunas (325464)
+ */
 public final class Ticket implements Comparable<Ticket> {
 
     private final String text;
     private final List<Trip> trips;
 
+    /**
+     * Constructs a ticket according to a list of given trips.
+     *
+     * @param trips
+     * List of trips.
+     * @throws IllegalArgumentException if the list of trips is empty
+     * or if the departure station is not the same over the list
+     */
     public Ticket(List<Trip> trips){
 
-        Preconditions.checkArgument(trips != null);
+        Preconditions.checkArgument(!trips.isEmpty());
         for(Trip a : trips){
             if(a.from() != trips.get(0).from()){
                 throw new IllegalArgumentException();
@@ -24,10 +37,24 @@ public final class Ticket implements Comparable<Ticket> {
         this.text = computeText(trips);
     }
 
+    /**
+     * Constructs a list of trips if there is only one trip in a list.
+     *
+     * @param from
+     * The departure station.
+     * @param to
+     * The arrival station.
+     * @param points
+     * A given number of points for a trip.
+     */
     public Ticket(Station from, Station to, int points){
         this(List.of(new Trip(from, to, points)));
     }
 
+    /**
+     * Returns a textual representation of a ticket.
+     * @return Returns a textual representation of a ticket.
+     */
     public String text(){
         return text;
     }
@@ -51,7 +78,14 @@ public final class Ticket implements Comparable<Ticket> {
         return finalText;
     }
 
-    //https://piazza.com/class/kl7qpcvl86d619?cid=85
+    /**
+     * A method that evaluates the number of points for a ticket given the connectivity
+     * of a player.
+     *
+     * @param connectivity
+     * connectivity of a player.
+     * @return the number of calculated points.
+     */
     public int points(StationConnectivity connectivity){
 
         int points = 0;
@@ -77,10 +111,24 @@ public final class Ticket implements Comparable<Ticket> {
         return points;
     }
 
+    /**
+     * a method that compares the textual length of two tickets.
+     *
+     * @param that
+     * a ticket that we want our ticket to be compared to.
+     *
+     * @return a strictly negative integer if (this) is strictly less than (that), a strictly
+     * positive integer if (this) is strictly greater than (that), and zero if the two are equal.
+     */
     public int compareTo(Ticket that){
         return this.text.compareTo(that.text);
     }
 
+    /**
+     *  Overrides the toString method so that it
+     *  returns the textual representation of a ticket.
+     * @return the textual representation of a ticket
+     */
     @Override
     public String toString(){
         return text;

@@ -1,18 +1,22 @@
 package ch.epl.tchu;
 
+/**
+ * method that simplifies the testing of preconditions.
+ *
+ * @author Shin Urech (327245)
+ *
+ */
 public final class Preconditions {
 
-    /**
-     * method that simplifies the testing of preconditions
-     *
-     * @author Shin Urech (327245)
-     *
-     */
+
     private Preconditions(){}
 
     /**
-     * this method throws an exception if the inputted boolean statement returns false
+     * this method throws an exception if the inputted boolean statement returns false.
+     *
      * @param shouldBeTrue
+     * the indication that should be correct.
+     * @throws IllegalArgumentException if the given indication is false
      */
     public static void checkArgument(boolean shouldBeTrue){
 

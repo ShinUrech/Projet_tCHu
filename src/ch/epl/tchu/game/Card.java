@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * enum to represent all types of cards
+ * enum to represent all types of cards.
  *
  * @author Shin Urech (327245)
  */
@@ -23,14 +23,13 @@ public enum Card {
 
     /**
      * list of all the different kinds of cards that are required to play the game except
-     * locmotives (CarList() is defined below and it allows us to creat a list of all cards without
-     * locomotives)
-     *
+     * locomotives (CarList() is defined below and it allows us to create a list of all
+     * cards without locomotives).
      */
     public static final List<Card> CARS = CarList();
 
     /**
-     * this method counts the number of cards in the list CARS
+     * this attribute counts the number of cards in the list CARS.
      */
     public static final int COUNT = CARS.size();
 
@@ -38,7 +37,7 @@ public enum Card {
     private final Color cardColor;
 
     /**
-     * this constructor is associating each card to each color
+     * this constructor is associating each card to each color.
      */
     Card(){
         switch(this) {
@@ -85,9 +84,12 @@ public enum Card {
     }
 
     /**
-     * this method returns the tye of card according to which color we choose
+     * this method returns the type of card according to which color we choose.
+     *
      * @param color
-     * @return
+     * a chosen color.
+     * @return the type of card of the selected color
+     *
      */
     public static Card of(Color color){
 
@@ -140,8 +142,8 @@ public enum Card {
     }
 
     /**
-     * this method returns the color of a chosen card
-     * @return cardColor
+     * Returns the color of a chosen card
+     * @return the color of a card.
      */
     public Color color(){
         return cardColor;
