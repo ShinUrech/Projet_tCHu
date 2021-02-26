@@ -26,10 +26,8 @@ public final class Ticket implements Comparable<Ticket> {
     public Ticket(List<Trip> trips){
 
         Preconditions.checkArgument(!trips.isEmpty());
-        for(int a = 0; a < trips.size(); a++){
-            if(trips.get(0).from() != trips.get(a).from()){
-                throw new IllegalArgumentException();
-            }
+        for(Trip a : trips){
+            Preconditions.checkArgument(a.from().toString().equals(trips.get(0).from().toString()));
         }
 
         this.trips = trips;
