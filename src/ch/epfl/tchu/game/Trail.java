@@ -31,13 +31,19 @@ public final class Trail {
      */
     public static Trail longest(List<Route> routes){
 
+        if(routes.isEmpty()){
+            return new Trail(0, null, null, null);
+        }
 
+        Trail longestTrail = null;
+        int maxLength = 0;
         List<Trail> initialTrails = new ArrayList<Trail>();
 
         for(Route a : routes){
             initialTrails.add(new Trail(a.length(), a.station1(), a.station2(), List.of(a)));
             initialTrails.add(new Trail(a.length(), a.station2(), a.station1(), List.of(a)));
         }
+
         while(!initialTrails.isEmpty()) {
 
             List<Trail> allTrails = new ArrayList<Trail>();
@@ -46,11 +52,62 @@ public final class Trail {
 
                 for (Route b : routes) {
 
-                    if ((a.station1.equals(b.station1()) || a.station2.equals(b.station1())) && !a.routes.contains(b)) {
-                        //allTrails.add(new Trail(a.length + b.length(), a.station))
+                    if (a.station2.equals(b.station1()) && !a.routes.contains(b)) {
+
+                        List<Route> addedRoutesInTrail = new ArrayList<Route>();
+
+                        for (Route c : a.routes){
+                            addedRoutesInTrail.add(c);
+                        }
+                        addedRoutesInTrail.add(b);
+
+                        allTrails.add(new Trail(a.length + b.length(), a.station1,
+                                b.station2(), addedRoutesInTrail));
+
+                        if(a.length + b.length() > maxLength){
+
+                            maxLength = a.length + b.length();
+                            longestTrail = new Trail(maxLength, a.station1,
+                                    b.station2(), addedRoutesInTrail);
+                        }
                     }
                 }
             }
+            initialTrails = allTrails;
+            allTrails.clear();
+        }
+        return longestTrail;
+    }
+
+    public int length(){
+        return length;
+    }
+
+    public Station station1(){
+        return station1;
+    }
+
+    public Station station2(){
+        return station2;
+    }
+
+    @Override
+    public String toString(){
+
+        String finalText = "";
+
+        if(length == 0 && station1.equals(null) && station2.equals(null)){
+            return "";
+        }
+        else{
+            List <Station> stationsOfJourney = new ArrayList<Station>();
+            for (Route a : routes){
+                stationsOfJourney.add(a.station1());
+            }
+            stationsOfJourney.add(routes.get(routes.size()-1).station2());
+
+            //finalText = String.join(", ", stationsOfJourney);
+            return null;
         }
     }
 }
