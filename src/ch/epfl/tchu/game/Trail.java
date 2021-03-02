@@ -108,7 +108,7 @@ public final class Trail {
 
             finalText = String.join(" - ", stationsOfJourney);
             finalText += " (" + length + ")";
-            return null;
+            return finalText;
         }
     }
 }
