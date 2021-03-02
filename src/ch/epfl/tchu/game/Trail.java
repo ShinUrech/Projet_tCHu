@@ -100,13 +100,14 @@ public final class Trail {
             return "";
         }
         else{
-            List <Station> stationsOfJourney = new ArrayList<Station>();
+            List <String> stationsOfJourney = new ArrayList<String>();
             for (Route a : routes){
-                stationsOfJourney.add(a.station1());
+                stationsOfJourney.add(a.station1().toString());
             }
-            stationsOfJourney.add(routes.get(routes.size()-1).station2());
+            stationsOfJourney.add(routes.get(routes.size()-1).station2().toString());
 
-            //finalText = String.join(", ", stationsOfJourney);
+            finalText = String.join(" - ", stationsOfJourney);
+            finalText += " (" + length + ")";
             return null;
         }
     }
