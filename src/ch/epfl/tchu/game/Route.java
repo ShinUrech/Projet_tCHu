@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * A class to express the different routes a player can take
- * @author Aidas Venckunas (325464)
  *
+ * @author Aidas Venckunas (325464)
  */
 
 public final class Route {
@@ -21,7 +21,7 @@ public final class Route {
     private final Color color;
 
     /**
-     * enum for the different ground levels a route can have (eiter overground or underground)
+     * enum for the different ground levels a route can have (either overground or underground).
      */
     public enum Level{
 
@@ -30,22 +30,30 @@ public final class Route {
     }
 
     /**
-     * Route constructor
+     * Route constructor with following parameters.
+     *
      * @param id
+     * the id of a route.
      * @param station1
+     * Station1 of the route.
      * @param station2
+     * Station2 of the route.
      * @param length
+     * Length of a route.
      * @param level
+     * Level of the Route(Tunnel of Road).
      * @param color
-     * @throws IllegalArgumentException if both station1 and station2 are the same or if the route length doesnt
-     * correspond to the bounds we set
-     * @throws NullPointerException if either one of the two station's ID is null or the groud level's value is null
+     * Color of a route(can be null).
+     *
+     * @throws IllegalArgumentException if both station1 and station2 are the same or if the route length doesn't
+     * correspond to the bounds MIN_ROUTE_LENGTH or MAX_ROUTE_LENGTH.
+     * @throws NullPointerException if either one of the two station's, ID or level value is null.
      */
     public Route(String id, Station station1, Station station2, int length, Level level, Color color){
 
         Preconditions.checkArgument(!station1.equals(station2));
-        Preconditions.checkArgument(length > Constants.MAX_ROUTE_LENGTH);
-        Preconditions.checkArgument(length < Constants.MIN_ROUTE_LENGTH);
+        Preconditions.checkArgument(length <= Constants.MAX_ROUTE_LENGTH);
+        Preconditions.checkArgument(length >= Constants.MIN_ROUTE_LENGTH);
         if(id == null || station1 == null || station2 == null || level == null){
             throw new NullPointerException();
         }
@@ -59,47 +67,72 @@ public final class Route {
 
     }
 
-    //getter for the route's ID
+    /**
+     * Returns id of a route.
+     * @return id of a route.
+     */
     public String id(){
         return id;
     }
 
-    //getter for the first station
+    /**
+     * Returns station1.
+     * @return station1.
+     */
     public Station station1(){
         return station1;
     }
 
-    //getter for the second station
+    /**
+     * Returns station2.
+     * @return station2.
+     */
     public Station station2(){
         return station2;
     }
 
-    //getter for the route length
+    /**
+     * Returns the length of a route.
+     * @return the length of a route.
+     */
     public int length(){
         return length;
     }
 
-    //getter for the route's ground level
+    /**
+     * Returns the level of a route.
+     * @return the level of a route.
+     */
     public Level level(){
         return level;
     }
 
-    //getter for the route's color
+    /**
+     * Returns the route's color.
+     * @return the route's color.
+     */
     public Color color(){
         return color;
     }
 
-    //getter for the pair of stations that makes up the route
+    /**
+     * Returns the pair of stations that make up a route.
+     * @return the pair of stations that make up a route.
+     */
     public List<Station> stations(){
         return List.of(station1, station2);
     }
 
     /**
-     * this methods gives us the "opposite" station on a certain route . Ex: if a route A goes from Lausanne to
+     * this methods gives us the "opposite" station on a certain route. Ex: if a route A goes from Lausanne to
      * Bern and you call the method for A with Bern as a parameter, the method will give Lausanne back.
+     *
      * @param station
-     * @return the opposite station on a give route
-     * @throws IllegalArgumentException if the imput does not correspond to either station of the route
+     * the given station.
+     *
+     * @return the opposite station on a give route.
+     *
+     * @throws IllegalArgumentException if the input does not correspond to any station of the route.
      */
     public Station stationOpposite(Station station) {
 
@@ -114,8 +147,9 @@ public final class Route {
     }
 
     /**
-     * Methods that calculates all possible combinations of cards that can be used to claim a route
-     * @return List of all possible combinations of cards to claim a route
+     * Method that calculates all possible combinations of cards that can be used to claim a route.
+     *
+     * @return List of all possible combinations of cards to claim a route.
      */
     public List<SortedBag<Card>> possibleClaimCards(){
 
@@ -168,11 +202,16 @@ public final class Route {
     }
 
     /**
-     * Method that calculates the number of additionnal cards needed to claim a tunnel
+     * Method that calculates the number of additional cards needed to claim a tunnel.
+     *
      * @param claimCards
+     * Cards used to claim a tunnel.
      * @param drawnCards
-     * @return the number of additional claim cards needed to claim a tunnel
-     * @throws
+     * 3 Additionally drawn cards from top of a deck.
+     * @throws IllegalArgumentException if level of a route is OVERGROUND or if a number of additionally
+     * drawn cards is not equal to 3.
+     *
+     * @return the number of additional claim cards needed to claim a tunnel.
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards){
 
@@ -197,8 +236,10 @@ public final class Route {
     }
 
     /**
-     * Method that returns the amount of points a player can get by claiming a route
-     * @return nb of points after the claim
+     * Method that returns the amount of points a player gets for claiming a route according
+     * to the route's length.
+     *
+     * @return number of points given for a claim.
      */
     public int claimPoints(){
         return Constants.ROUTE_CLAIM_POINTS.get(length);
