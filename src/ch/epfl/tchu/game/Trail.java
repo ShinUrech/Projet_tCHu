@@ -48,10 +48,6 @@ public final class Trail {
             initialTrails.add(new Trail(a.length(), a.station2(), a.station1(), List.of(a)));
         }
 
-        for(Trail a : initialTrails){
-            System.out.println(a);
-        }
-
         while(!initialTrails.isEmpty()){
 
             allTrails.removeAll(allTrails);
@@ -68,7 +64,6 @@ public final class Trail {
                         routesToAdd.add(b);
                     }
                 }
-                System.out.println();
 
                 //Adding these routes and defining new station1 and station2
                 for(Route c : routesToAdd){
