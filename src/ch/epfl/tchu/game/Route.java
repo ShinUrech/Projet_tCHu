@@ -3,6 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -153,36 +154,33 @@ public final class Route {
      */
     public List<SortedBag<Card>> possibleClaimCards(){
 
-        SortedBag.Builder <Card> possibilities = new SortedBag.Builder<Card>();
+        List<SortedBag<Card>> possibilities = new ArrayList<SortedBag<Card>>();
 
         switch (level) {
 
             case OVERGROUND:
 
                 if(color != null){
-
                     possibilities.add(SortedBag.of(length, Card.of(color)));
-                    SortedBag <Card> possibilities_built = possibilities.build();
-                    return List.of(possibilities_built);
+                    return possibilities;
                 }
                 else{
 
                     for(Card b : Card.CARS){
                         possibilities.add(SortedBag.of(length, b));
                     }
-                    SortedBag <Card> possibilities_built = possibilities.build();
-                    return List.of(possibilities_built);
+
+                    return possibilities;
                 }
 
             case UNDERGROUND:
 
                 if(color != null){
 
-                    for(int a = length; a > 0; a--){
+                    for(int a = length; a >= 0; a--){
                         possibilities.add(SortedBag.of(a, Card.of(color), length - a, Card.LOCOMOTIVE));
                     }
-                    SortedBag <Card> possibilities_built = possibilities.build();
-                    return List.of(possibilities_built);
+                    return possibilities;
                 }
                 else{
 
@@ -192,8 +190,9 @@ public final class Route {
                             possibilities.add(SortedBag.of(length - a, b, a, Card.LOCOMOTIVE));
                         }
                     }
-                    SortedBag <Card> possibilities_built = possibilities.build();
-                    return List.of(possibilities_built);
+                    possibilities.add(SortedBag.of(length, Card.LOCOMOTIVE));
+
+                    return possibilities;
                 }
 
 
