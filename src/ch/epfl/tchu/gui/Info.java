@@ -3,8 +3,10 @@ package ch.epfl.tchu.gui;
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.Card;
+import ch.epfl.tchu.game.Color;
 import ch.epfl.tchu.game.Route;
 import ch.epfl.tchu.game.Trail;
+import java.lang.Enum;
 
 import java.util.List;
 
@@ -46,7 +48,7 @@ public final class Info {
                 break;
             case VIOLET: cardColor = StringsFr.VIOLET_CARD;
                 break;
-            case BLUE: cardColor = StringsFr.BLACK_CARD;
+            case BLUE: cardColor = StringsFr.BLUE_CARD;
                 break;
             case GREEN: cardColor =  StringsFr.GREEN_CARD;
                 break;
@@ -134,7 +136,7 @@ public final class Info {
      * @return a sentence that says exactly what i said in the first line
      */
     public String claimedRoute(Route route, SortedBag<Card> cards){
-        return String.format(StringsFr.CLAIMED_ROUTE, this.playername, route, cards);
+        return String.format(StringsFr.CLAIMED_ROUTE, this.playername, route, drawSortedBag(cards));
     }
 
     /**
@@ -144,7 +146,7 @@ public final class Info {
      * @return a sentence that announces which player claims which tunnel with which combination of cards
      */
     public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards){
-        return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, this.playername, route, initialCards);
+        return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, this.playername, route, drawSortedBag(initialCards));
     }
 
     /**
@@ -162,7 +164,7 @@ public final class Info {
                 break;
             default: statement = String.format(StringsFr.SOME_ADDITIONAL_COST, additionalCost, StringsFr.plural(additionalCost));
         }
-        return String.format(StringsFr.ADDITIONAL_CARDS_ARE, drawnCards)+ statement;
+        return String.format(StringsFr.ADDITIONAL_CARDS_ARE, drawSortedBag(drawnCards))+ statement;
 
     }
 
@@ -191,11 +193,37 @@ public final class Info {
      * @return a statement that announces which player gets a bonus for which trail
      */
     public String getsLongestTrailBonus(Trail longestTrail){
-        return String.format(StringsFr.GETS_BONUS, this.playername, longestTrail.station1()+StringsFr.EN_DASH_SEPARATOR+longestTrail.station2());
+        return String.format(StringsFr.GETS_BONUS, this.playername, trailDraw(longestTrail));
     }
 
+    /**
+     * this method returns an endgame statement that anounces who wins with how many points
+     * @param points amount of points of the winner
+     * @param loserPoints amount of points of the looser
+     * @return a statement with which player won with how many points and how many points the looser got
+     */
     public String won(int points, int loserPoints){
         return String.format(StringsFr.WINS, this.playername, points, StringsFr.plural(points), loserPoints, StringsFr.plural(loserPoints));
+    }
+
+    private static String trailDraw(Trail trail){
+
+       return trail.station1().toString() + StringsFr.EN_DASH_SEPARATOR + trail.station2().toString();
+
+    }
+    private static String drawSortedBag(SortedBag<Card> cards){
+        String finalString = "";
+        boolean firstCardAdded = false;
+
+        for(int i = Card.COUNT-1; i >= 0; --i){
+            if (!firstCardAdded && cards.contains(Card.ALL.get(i))){
+                finalString = "et " + colorByType(Card.ALL.get(i))  + " x" + cards.countOf(Card.ALL.get(i));
+                firstCardAdded = true;
+            } else if (cards.contains(Card.ALL.get(i)))
+                finalString = colorByType(Card.ALL.get(i)) +" x" + cards.countOf(Card.ALL.get(i)) + ", " + finalString;
+        }
+
+        return finalString;
     }
 }
 
