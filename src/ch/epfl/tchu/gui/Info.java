@@ -12,23 +12,23 @@ import java.util.List;
 
 /**
  * @author Shin Urech (327245)
- * this class is used to creat all the textual content that will be implemented into the game later on
+ * this class is used to create all the textual content that will be implemented into the game later on
  */
 
 public final class Info {
 
-    private final String playername;
+    private final String playerName;
 
     /**
-     * this public constructor is used to initialise the playername that is used to creat specific textual instances
-     * @param playername is the name of the player in question
+     * this public constructor is used to initialise the player name that is used to create specific textual instances
+     * @param playerName is the name of the player in question
      */
-    Info(String playername){
-        this.playername = playername;
+    public Info(String playerName){
+        this.playerName = playerName;
     }
 
     /**
-     * this method returns a card's name (displays an s if count > 1)
+     * this method returns a card's name (adds an s if count > 1)
      * @param card is the type of card we want to display
      * @param count is the multiplicity of the card in question
      * @return a string with the card's name (adds an s if there are more than one card)
@@ -75,7 +75,7 @@ public final class Info {
      * @return a string that displays all player's names and the number of points they all got in common
      */
     public static String draw(List<String> playerNames, int points){
-        return String.format(StringsFr.DRAW, playerNames, points);
+        return String.format(StringsFr.DRAW, String.join(StringsFr.AND_SEPARATOR, playerNames), points);
     }
 
     /**
@@ -83,7 +83,7 @@ public final class Info {
      * @return a string that tells players which one will start playing
      */
     public String willPlayFirst(){
-       return String.format(StringsFr.WILL_PLAY_FIRST, this.playername);
+       return String.format(StringsFr.WILL_PLAY_FIRST, this.playerName);
     }
 
     /**
@@ -92,7 +92,7 @@ public final class Info {
      * @return a sentence that tells which player kept how many cards
      */
     public String keptTickets(int count){
-        return String.format(StringsFr.KEPT_N_TICKETS, this.playername, StringsFr.plural(count));
+        return String.format(StringsFr.KEPT_N_TICKETS, this.playerName, count, StringsFr.plural(count));
     }
 
     /**
@@ -100,7 +100,7 @@ public final class Info {
      * @return a string that tells which player is allowed to play
      */
     public String canPlay(){
-        return String.format(StringsFr.CAN_PLAY, this.playername);
+        return String.format(StringsFr.CAN_PLAY, this.playerName);
     }
 
     /**
@@ -109,7 +109,7 @@ public final class Info {
      * @return a string that tells which player has drawn how many cards
      */
     public String drewTickets(int count) {
-        return String.format(StringsFr.DREW_TICKETS, this.playername,count ,StringsFr.plural(count));
+        return String.format(StringsFr.DREW_TICKETS, this.playerName, count, StringsFr.plural(count));
     }
 
     /**
@@ -117,7 +117,7 @@ public final class Info {
      * @return a string that announces the statement above
      */
     public String drewBlindCard(){
-        return String.format(StringsFr.DREW_BLIND_CARD, this.playername);
+        return String.format(StringsFr.DREW_BLIND_CARD, this.playerName);
     }
 
     /**
@@ -126,7 +126,7 @@ public final class Info {
      * @return a string that tells whiich player drew which type of card
      */
     public String drewVisibleCard(Card card){
-        return String.format(StringsFr.DREW_VISIBLE_CARD, this.playername, card);
+        return String.format(StringsFr.DREW_VISIBLE_CARD, this.playerName, colorByType(card));
     }
 
     /**
@@ -136,7 +136,8 @@ public final class Info {
      * @return a sentence that says exactly what i said in the first line
      */
     public String claimedRoute(Route route, SortedBag<Card> cards){
-        return String.format(StringsFr.CLAIMED_ROUTE, this.playername, route, drawSortedBag(cards));
+        return String.format(StringsFr.CLAIMED_ROUTE, this.playerName, route.station1().toString() +
+                StringsFr.EN_DASH_SEPARATOR + route.station2().toString(), drawSortedBag(cards));
     }
 
     /**
@@ -146,7 +147,8 @@ public final class Info {
      * @return a sentence that announces which player claims which tunnel with which combination of cards
      */
     public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards){
-        return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, this.playername, route, drawSortedBag(initialCards));
+        return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, this.playerName, route.station1().toString() +
+                StringsFr.EN_DASH_SEPARATOR + route.station2().toString(), drawSortedBag(initialCards));
     }
 
     /**
@@ -174,7 +176,8 @@ public final class Info {
      * @return gives back a statement that tells which player didnt claim which route
      */
     public String didNotClaimRoute(Route route){
-        return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, this.playername, route);
+        return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, this.playerName, route.station1().toString() +
+                StringsFr.EN_DASH_SEPARATOR + route.station2().toString());
     }
 
     /**
@@ -184,7 +187,7 @@ public final class Info {
      */
     public String lastTurnBegins(int carCount){
         Preconditions.checkArgument(carCount <= 2);
-        return String.format(StringsFr.LAST_TURN_BEGINS, this.playername, carCount, StringsFr.plural(carCount));
+        return String.format(StringsFr.LAST_TURN_BEGINS, this.playerName, carCount, StringsFr.plural(carCount));
     }
 
     /**
@@ -193,7 +196,7 @@ public final class Info {
      * @return a statement that announces which player gets a bonus for which trail
      */
     public String getsLongestTrailBonus(Trail longestTrail){
-        return String.format(StringsFr.GETS_BONUS, this.playername, trailDraw(longestTrail));
+        return String.format(StringsFr.GETS_BONUS, this.playerName, trailDraw(longestTrail));
     }
 
     /**
@@ -203,7 +206,8 @@ public final class Info {
      * @return a statement with which player won with how many points and how many points the looser got
      */
     public String won(int points, int loserPoints){
-        return String.format(StringsFr.WINS, this.playername, points, StringsFr.plural(points), loserPoints, StringsFr.plural(loserPoints));
+        return String.format(StringsFr.WINS, this.playerName, points, StringsFr.plural(points),
+                loserPoints, StringsFr.plural(loserPoints));
     }
 
     private static String trailDraw(Trail trail){
@@ -211,18 +215,44 @@ public final class Info {
        return trail.station1().toString() + StringsFr.EN_DASH_SEPARATOR + trail.station2().toString();
 
     }
-    private static String drawSortedBag(SortedBag<Card> cards){
-        String finalString = "";
-        boolean firstCardAdded = false;
 
-        for(int i = Card.COUNT-1; i >= 0; --i){
-            if (!firstCardAdded && cards.contains(Card.ALL.get(i))){
-                finalString = "et " + colorByType(Card.ALL.get(i))  + " x" + cards.countOf(Card.ALL.get(i));
-                firstCardAdded = true;
-            } else if (cards.contains(Card.ALL.get(i)))
-                finalString = colorByType(Card.ALL.get(i)) +" x" + cards.countOf(Card.ALL.get(i)) + ", " + finalString;
+    private static String drawSortedBag(SortedBag<Card> cards) {
+        String finalString = null;
+        boolean firstCardAdded = false;
+        int alreadyAdded = 0;
+        int countTypesOfcards = 0;
+
+        for(int i = 0; i < Card.COUNT; ++i){
+            if(cards.contains(Card.ALL.get(i))){
+                ++countTypesOfcards;
+            }
         }
 
+        for (int i = 0; i < Card.COUNT; ++i) {
+
+            if (cards.size() == 1 && cards.contains(Card.ALL.get(i))) {
+                finalString = cards.countOf(Card.ALL.get(i)) + " " + colorByType(Card.ALL.get(i))
+                        + StringsFr.plural(cards.countOf(Card.ALL.get(i)));
+                return finalString;
+            } else if (cards.contains(Card.ALL.get(i)) && finalString == null) {
+
+                finalString = cards.countOf(Card.ALL.get(i)) + " " + colorByType(Card.ALL.get(i))
+                        + StringsFr.plural(cards.countOf(Card.ALL.get(i)));
+                ++alreadyAdded;
+            } else if (cards.contains(Card.ALL.get(i)) && alreadyAdded < countTypesOfcards - 1) {
+
+                finalString += ", " + cards.countOf(Card.ALL.get(i)) + " " + colorByType(Card.ALL.get(i))
+                        + StringsFr.plural(cards.countOf(Card.ALL.get(i)));
+                ++alreadyAdded;
+            } else if (cards.contains(Card.ALL.get(i)) && alreadyAdded == countTypesOfcards - 1) {
+
+                finalString += " et " + cards.countOf(Card.ALL.get(i)) + " " + colorByType(Card.ALL.get(i))
+                        + StringsFr.plural(cards.countOf(Card.ALL.get(i)));
+                ++alreadyAdded;
+
+                return finalString;
+            }
+        }
         return finalString;
     }
 }

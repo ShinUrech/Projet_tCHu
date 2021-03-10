@@ -15,29 +15,27 @@ import java.util.Random;
  */
 public final class Deck<C extends Comparable<C>> {
 
-    private final SortedBag<C> DECK;
+    private final List<C> DECK;
 
     /**
      * This class creates and Shuffles the deck of cards
-     * @param cards a sortedbag containing all cards needed to play the game
+     * @param cards a SortedBag containing all cards needed to play the game
      * @param rng this is the key to randomise the deck shuffle
      * @param <C> generic type of the content of the deck
-     * @return the return type is a shuffled deck
+     * @return a shuffled deck
      */
    public static <C extends Comparable<C>> Deck<C> of(SortedBag<C> cards, Random rng){
 
-       List<C> shuffleList = cards.toList();
+       List<C> shuffledList = cards.toList();
 
-       Collections.shuffle(shuffleList, rng);
-       SortedBag<C> shuffleCards = SortedBag.of(shuffleList);
+       Collections.shuffle(shuffledList, rng);
 
-       Deck<C> deck = new Deck<>(shuffleCards);
+       Deck<C> deck = new Deck<>(shuffledList);
 
-
-            return deck;
+       return deck;
    }
 
-   private Deck(SortedBag<C> cards){
+   private Deck(List<C> cards){
       DECK = cards;
 
    }
@@ -63,10 +61,9 @@ public final class Deck<C extends Comparable<C>> {
      * @return card at index 0 in the deck
      */
    public C topCard(){
-       Preconditions.checkArgument(!DECK.isEmpty());
+       Preconditions.checkArgument(!isEmpty());
        return DECK.get(0);
    }
-
 
     /**
      * this method gives back a copy of the original deck without the top card
@@ -74,8 +71,8 @@ public final class Deck<C extends Comparable<C>> {
      */
    public Deck<C> withoutTopCard(){
 
-       SortedBag<C> topCard = SortedBag.of(DECK.get(0));
-       Deck<C> withoutTopCard = new Deck<>(DECK.difference(topCard));
+       Preconditions.checkArgument(!isEmpty());
+       Deck<C> withoutTopCard = new Deck<>(DECK.subList(1, DECK.size()));
        return withoutTopCard;
    }
 
@@ -100,16 +97,23 @@ public final class Deck<C extends Comparable<C>> {
 
     /**
      * this method returns a new Deck with the count th first cards of the original input Deck
-     * @param count nb of cards we want to get from the top of the Deck
-     * @return new Deck
+     * @param count number of cards we want to delete from the top of the Deck
+     * @return newly created Deck.
      */
 
     public Deck<C> withoutTopCards(int count){
-       Deck<C> newDeck = new Deck<>(DECK.difference(this.topCards(count)));
+
+        checkCount(count);
+        Deck<C> newDeck = new Deck(DECK);
+
+        while(count > 0){
+            newDeck = newDeck.withoutTopCard();
+            --count;
+        }
+
        return newDeck;
 
     }
-
 
     private void checkCount(int count){
         Preconditions.checkArgument(count >= 0 && count <= DECK.size());

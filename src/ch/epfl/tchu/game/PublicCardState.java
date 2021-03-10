@@ -7,27 +7,28 @@ import static java.util.Objects.checkIndex;
 
 /**
  * @author Shin Urech (327245)
- * this class handles all the public informations players can have about the cards (f. ex. the size of the deck)
+ * this class contains all the public information about playing cards (for example:
+ * the size of the deck).
  */
 
 public class PublicCardState<Cards> {
 
-    public List<Card> publicCards;
-    private int deckSize;
-    private int discardsSize;
+    public final List<Card> faceUpCards;
+    private final int deckSize;
+    private final int discardsSize;
 
     /**
      * public constructor for the public cards
-     * @param faceUpCards is the list of cards that we wabt to make publicly avialable
+     * @param faceUpCards is the list of cards that we want to make publicly available
      * @param deckSize size of the deck
      * @param discardsSize size of the discard deck
      */
-    PublicCardState(List<Card> faceUpCards, int deckSize, int discardsSize){
+    public PublicCardState(List<Card> faceUpCards, int deckSize, int discardsSize){
 
         Preconditions.checkArgument(faceUpCards.size() == 5);
-        Preconditions.checkArgument(deckSize >= 0 && deckSize >= 0);
+        Preconditions.checkArgument(deckSize >= 0 && discardsSize >= 0);
 
-        publicCards = faceUpCards;
+        this.faceUpCards = faceUpCards;
         this.deckSize = deckSize;
         this.discardsSize = discardsSize;
 
@@ -35,11 +36,11 @@ public class PublicCardState<Cards> {
 
     /**
      * this method gives back the count of all cards that arent being held by a player
-     * @return the number of cards taht arent in a player's hand
+     * @return the number of cards that arent in a player's hand
      */
 
     public int totalSize(){
-        return publicCards.size() + deckSize + discardsSize;
+        return faceUpCards.size() + deckSize + discardsSize;
     }
 
     /**
@@ -47,8 +48,7 @@ public class PublicCardState<Cards> {
      * @return
      */
     public List<Card> faceUpCards(){
-        Preconditions.checkArgument(publicCards.size() == 5);
-        return publicCards;
+        return faceUpCards;
     }
 
     /**
@@ -58,7 +58,7 @@ public class PublicCardState<Cards> {
      */
     public Card faceUpCard(int slot){
         checkIndex(slot, 5);
-        return publicCards.get(slot);
+        return faceUpCards.get(slot);
     }
 
     /**
