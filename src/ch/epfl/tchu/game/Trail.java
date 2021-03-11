@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class for Path(Trail) consisting of routes
+ * A class for Path(Trail) consisting of routes.
  *
  * @author Aidas Venckunas (325464)
  * @author Shin Urech (327245)
@@ -38,7 +38,7 @@ public final class Trail {
             return new Trail(0, null, null, routes);
         }
 
-        Trail longestTrail = null;
+        Trail longestTrail = new Trail(0, null, null, routes);
         int maxLength = 0;
         List<Trail> initialTrails = new ArrayList<Trail>();
         List<Trail> allTrails = new ArrayList<Trail>();
@@ -46,6 +46,11 @@ public final class Trail {
         for(Route a : routes){
             initialTrails.add(new Trail(a.length(), a.station1(), a.station2(), List.of(a)));
             initialTrails.add(new Trail(a.length(), a.station2(), a.station1(), List.of(a)));
+
+            if(a.length() > maxLength){
+                maxLength = a.length();
+                longestTrail = new Trail(a.length(), a.station1(), a.station2(), List.of(a));
+            }
         }
 
         while(!initialTrails.isEmpty()){

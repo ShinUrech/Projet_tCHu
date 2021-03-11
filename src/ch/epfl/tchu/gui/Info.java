@@ -11,8 +11,10 @@ import java.lang.Enum;
 import java.util.List;
 
 /**
+ * This class is used to create all the textual content that will be implemented into the game later on.
+ *
  * @author Shin Urech (327245)
- * this class is used to create all the textual content that will be implemented into the game later on
+ * @author Aidas Venckunas (325464)
  */
 
 public final class Info {
@@ -20,18 +22,22 @@ public final class Info {
     private final String playerName;
 
     /**
-     * this public constructor is used to initialise the player name that is used to create specific textual instances
-     * @param playerName is the name of the player in question
+     * this public constructor is used to initialise the player name that is used to
+     * create specific textual instances.
+     *
+     * @param playerName is the name of the player in question.
      */
     public Info(String playerName){
         this.playerName = playerName;
     }
 
     /**
-     * this method returns a card's name (adds an s if count > 1)
+     * This method returns a card's name (adds an s if count > 1).
+     *
      * @param card is the type of card we want to display
      * @param count is the multiplicity of the card in question
-     * @return a string with the card's name (adds an s if there are more than one card)
+     *
+     * @return a string with the card's name (adds an s if there are more than one card).
      */
     public static String cardName(Card card, int count){
         String string = colorByType(card) + StringsFr.plural(count);
@@ -68,10 +74,12 @@ public final class Info {
     }
 
     /**
-     * This method gives back a String that consists of a list of all players that ccollected a given nb of points
-     * (count points for instance)
+     * This method gives back a String that consists of a list of all players that collected a given nb of points
+     * (count points for instance).
+     *
      * @param playerNames is the list of all names of players that got count points
      * @param points is the number of points in question
+     *
      * @return a string that displays all player's names and the number of points they all got in common
      */
     public static String draw(List<String> playerNames, int points){
@@ -79,7 +87,7 @@ public final class Info {
     }
 
     /**
-     * this method returns the name of the player that will play first
+     * This method returns the name of the player that will play first.
      * @return a string that tells players which one will start playing
      */
     public String willPlayFirst(){
@@ -87,8 +95,10 @@ public final class Info {
     }
 
     /**
-     * this method returns a sentence which indicates the number of tickets a player decides to keep
+     * This method returns a sentence which indicates the number of tickets a player decides to keep.
+     *
      * @param count the nb of tickets a player decides to keep
+     *
      * @return a sentence that tells which player kept how many cards
      */
     public String keptTickets(int count){
@@ -96,7 +106,7 @@ public final class Info {
     }
 
     /**
-     * this method tells which player is allowed to play
+     * This method tells which player is allowed to play.
      * @return a string that tells which player is allowed to play
      */
     public String canPlay(){
@@ -104,8 +114,10 @@ public final class Info {
     }
 
     /**
-     * this method announces the number of ticket's which have been drawn by a given player
-     * @param count is the nb of ticket's that have been drawn by a certain player
+     * This method announces the number of tickets which have been drawn by a given player.
+     *
+     * @param count is the nb of tickets that have been drawn by a certain player
+     *
      * @return a string that tells which player has drawn how many cards
      */
     public String drewTickets(int count) {
@@ -113,7 +125,7 @@ public final class Info {
     }
 
     /**
-     * this method will be used to announce that a player drew a card from the deck
+     * This method announces that a player drew a card from the deck.
      * @return a string that announces the statement above
      */
     public String drewBlindCard(){
@@ -121,8 +133,10 @@ public final class Info {
     }
 
     /**
-     * this method creates a statement that says which player drew which type of card
+     * This method creates a statement that says which player drew which type of card.
+     *
      * @param card the type of card that has been drawn
+     *
      * @return a string that tells whiich player drew which type of card
      */
     public String drewVisibleCard(Card card){
@@ -130,9 +144,11 @@ public final class Info {
     }
 
     /**
-     *this method tells whichever route have been claimed by whichever player with whichever cards
+     * This method tells whichever route have been claimed by whichever player with whichever cards.
+     *
      * @param route is the claimed route
      * @param cards is the set of cards that have been used to claim the route
+     *
      * @return a sentence that says exactly what i said in the first line
      */
     public String claimedRoute(Route route, SortedBag<Card> cards){
@@ -141,9 +157,11 @@ public final class Info {
     }
 
     /**
-     * this method announces whenever a player is trying to claim a tunnel with a certain combination of cards
+     * This method announces whenever a player is trying to claim a tunnel with a certain combination of cards.
+     *
      * @param route is the tunnel that is being claimed
      * @param initialCards is the combination of cards used to attempt to claim it
+     *
      * @return a sentence that announces which player claims which tunnel with which combination of cards
      */
     public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards){
@@ -152,12 +170,14 @@ public final class Info {
     }
 
     /**
-     * this method gives back a statement that indicates which additionnal cards have been drawn and what the additionnal
-     * cost is
+     * This method gives back a statement that indicates which additional cards have been drawn and what the
+     * additional cost is.
+     *
      * @param drawnCards the list of drawn additional cards
-     * @param additionalCost the cost of those cards
-     * @return a statement that tells which cards have been drawn and what their cost is (says no additional cost if they
-     * were free)
+     * @param additionalCost the cost implied by these cards
+     *
+     * @return a statement that tells which cards have been drawn and what their cost is (says no additional
+     * cost if they were free).
      */
     public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionalCost){
         String statement;
@@ -171,9 +191,11 @@ public final class Info {
     }
 
     /**
-     * this method announces that a certain player did not claim a route
+     * This method announces that a certain player did not claim a route.
+     *
      * @param route is the route that was not claimed
-     * @return gives back a statement that tells which player didnt claim which route
+     *
+     * @return gives back a statement that tells which player didn't claim which route.
      */
     public String didNotClaimRoute(Route route){
         return String.format(StringsFr.DID_NOT_CLAIM_ROUTE, this.playerName, route.station1().toString() +
@@ -181,9 +203,12 @@ public final class Info {
     }
 
     /**
-     * this method announces that a given player only has two or less wagon cards left and that the last round begins
+     * This method announces that a player only has two or less wagon cards left and that the last round begins.
+     *
      * @param carCount number of cards left on a players hand
-     * @return a statement that announces the amount of cards left in a players hand and tha the last round begins
+     * @throws IllegalArgumentException if cars count is bigger than 2
+     *
+     * @return a statement that announces the amount of cards left in a players hand and that the last round begins
      */
     public String lastTurnBegins(int carCount){
         Preconditions.checkArgument(carCount <= 2);
@@ -191,8 +216,10 @@ public final class Info {
     }
 
     /**
-     * this method annonces that a certain player gets a longest trail bonus
+     * This method announces that a certain player gets a longest trail bonus.
+     *
      * @param longestTrail is the longest trail in question
+     *
      * @return a statement that announces which player gets a bonus for which trail
      */
     public String getsLongestTrailBonus(Trail longestTrail){
@@ -200,9 +227,11 @@ public final class Info {
     }
 
     /**
-     * this method returns an endgame statement that anounces who wins with how many points
+     * This method returns an endgame statement that announces who wins with how many points.
+     *
      * @param points amount of points of the winner
      * @param loserPoints amount of points of the looser
+     *
      * @return a statement with which player won with how many points and how many points the looser got
      */
     public String won(int points, int loserPoints){
