@@ -119,7 +119,7 @@ public final class Deck<C extends Comparable<C>> {
     public Deck<C> withoutTopCards(int count){
 
         checkCount(count);
-        Deck<C> newDeck = new Deck(DECK);
+        Deck<C> newDeck = new Deck<>(DECK);
 
         while(count > 0){
             newDeck = newDeck.withoutTopCard();
