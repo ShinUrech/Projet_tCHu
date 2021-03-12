@@ -12,9 +12,9 @@ import static java.util.Objects.checkIndex;
  * @author Shin Urech (327245)
  */
 
-public class PublicCardState<Cards> {
+public class PublicCardState {
 
-    public final List<Card> faceUpCards;
+    private final List<Card> faceUpCards;
     private final int deckSize;
     private final int discardsSize;
 
@@ -92,7 +92,7 @@ public class PublicCardState<Cards> {
      * This method returns the discard's size.
      * @return discard's size
      */
-    public int discardSize(){
+    public int discardsSize(){
         return discardsSize;
     }
 

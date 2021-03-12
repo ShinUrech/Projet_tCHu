@@ -19,10 +19,13 @@ public final class CardState extends PublicCardState{
 
     private final Deck<Card> deck;
     private final SortedBag<Card> discards;
+    private final List<Card> faceUpCardsPrivate;
 
     private CardState(Deck<Card> deck, SortedBag<Card> discards, SortedBag<Card> FaceUpCards){
 
-        super(FaceUpCards.toList(), Constants.TOTAL_CARDS_COUNT-Constants.FACE_UP_CARDS_COUNT, 0);
+        super(List.copyOf(FaceUpCards.toList()), deck.size(), discards.size());
+
+        faceUpCardsPrivate = FaceUpCards.toList();
 
         this.deck = deck;
         this.discards = discards;
@@ -39,9 +42,9 @@ public final class CardState extends PublicCardState{
      * and an empty discard.
      */
 
-    public CardState of(Deck<Card> deck){
+    public static CardState of(Deck<Card> deck){
         Preconditions.checkArgument(deck.size() >= 5);
-        return new CardState(deck.withoutTopCards(5), SortedBag.of(), deck.topCards(4));
+        return new CardState(deck.withoutTopCards(5), SortedBag.of(), deck.topCards(5));
 
     }
 
@@ -57,10 +60,11 @@ public final class CardState extends PublicCardState{
      */
 
     public CardState withDrawnFaceUpCard(int slot){
+
         checkIndex(slot,5);
         Preconditions.checkArgument(!deck.isEmpty());
 
-        List<Card> newFaceUpCards = List.copyOf(faceUpCards);
+        List<Card> newFaceUpCards = faceUpCardsPrivate;
         newFaceUpCards.set(slot, deck.topCard());
         Deck<Card> newDeck = deck.withoutTopCard();
 
@@ -86,7 +90,7 @@ public final class CardState extends PublicCardState{
      *
      * @return new CardState without the top card
      */
-    public CardState withOutTopDeckCard(){
+    public CardState withoutTopDeckCard(){
         Preconditions.checkArgument(!deck.isEmpty());
         return new CardState(deck.withoutTopCard(), this.discards, SortedBag.of(this.faceUpCards()));
     }
@@ -95,13 +99,13 @@ public final class CardState extends PublicCardState{
      * This method returns a new CardState made out of all the discards.
      *
      * @param rng is a random parameter for a fair shuffle
-     * @throws IllegalArgumentException if the deck is empty
+     * @throws IllegalArgumentException if the deck is not empty
      *
      * @return a new CardState made out of all previously disposed cards
      */
     public CardState withDeckRecreatedFromDiscards(Random rng){
         Preconditions.checkArgument(deck.isEmpty());
-        return this.of(Deck.of(discards, rng));
+        return of(Deck.of(this.discards, rng));
     }
 
     /**
