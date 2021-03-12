@@ -12,7 +12,7 @@ import static java.util.Objects.checkIndex;
  * @author Shin Urech (327245)
  */
 
-public class PublicCardState<Cards> {
+public class PublicCardState {
 
     private final List<Card> faceUpCards;
     private final int deckSize;
