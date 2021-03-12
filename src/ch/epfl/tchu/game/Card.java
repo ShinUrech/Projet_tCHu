@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * enum to represent all types of cards.
+ * Enum to represent all types of cards.
  *
  * @author Shin Urech (327245)
  */
@@ -23,17 +23,17 @@ public enum Card {
 
 
     /**
-     * list of all possible cards
+     * List of all possible cards.
      */
     public static final List<Card> ALL = List.of(Card.values());
 
     /**
-     * this attribute counts the number of cards in the list CARS.
+     * This attribute counts the number of cards in the list ALL.
      */
     public static final int COUNT = ALL.size();
 
     /**
-     * list of all the different kinds of cards that are required to play the ch.epfl.tchu.game except
+     * List of all the different kinds of cards that are required to play except
      * locomotives (CarList() is defined below and it allows us to create a list of all
      * cards without locomotives).
      */
@@ -43,17 +43,18 @@ public enum Card {
     private final Color cardColor;
 
     /**
-     * this constructor is associating each card to each color.
+     * This constructor is associating each card to each color.
      */
    private Card(Color cardColor){
         this.cardColor = cardColor;
     }
 
     /**
-     * this method returns the type of card according to which color we choose.
+     * This method returns the type of card according to which color we choose.
      *
      * @param color
      * a chosen color.
+     *
      * @return the type of card of the selected color
      *
      */
@@ -104,7 +105,7 @@ public enum Card {
     }
 
     /**
-     * Returns the color of a chosen card
+     * Returns the color of a chosen card.
      * @return the color of a card.
      */
     public Color color(){

@@ -6,9 +6,10 @@ import java.util.List;
 import static java.util.Objects.checkIndex;
 
 /**
- * @author Shin Urech (327245)
- * this class contains all the public information about playing cards (for example:
+ * This class contains all the public information about playing cards (for example:
  * the size of the deck).
+ *
+ * @author Shin Urech (327245)
  */
 
 public class PublicCardState<Cards> {
@@ -18,10 +19,13 @@ public class PublicCardState<Cards> {
     private final int discardsSize;
 
     /**
-     * public constructor for the public cards
+     * Public constructor for the public cards.
+     *
      * @param faceUpCards is the list of cards that we want to make publicly available
      * @param deckSize size of the deck
      * @param discardsSize size of the discard deck
+     * @throws  IllegalArgumentException if the number of face-up cards is not 5 or deck and discards size
+     * are not within the bounds.
      */
     public PublicCardState(List<Card> faceUpCards, int deckSize, int discardsSize){
 
@@ -35,8 +39,8 @@ public class PublicCardState<Cards> {
     }
 
     /**
-     * this method gives back the count of all cards that arent being held by a player
-     * @return the number of cards that arent in a player's hand
+     * This method gives back the count of all cards that arent being held by a player.
+     * @return the number of cards that arent in a player's hand.
      */
 
     public int totalSize(){
@@ -44,16 +48,19 @@ public class PublicCardState<Cards> {
     }
 
     /**
-     * this method gives back a list of all 5 publicly available cards
-     * @return
+     * This method gives back a list of all 5 publicly available cards.
+     * @return a list of all 5 publicly available cards.
      */
     public List<Card> faceUpCards(){
         return faceUpCards;
     }
 
     /**
-     * this method gives back a face up card at a given index
+     * This method gives back a face up card at a given index.
+     *
      * @param slot index of the card we want to get (from 0 to 4)
+     * @throws NullPointerException if index is not within the bounds
+     *
      * @return the card we asked for at the given index
      */
     public Card faceUpCard(int slot){
@@ -62,7 +69,7 @@ public class PublicCardState<Cards> {
     }
 
     /**
-     * this method gives back the deck's size
+     * This method gives back the deck's size.
      * @return the deck size
      */
     public int deckSize(){
@@ -70,7 +77,7 @@ public class PublicCardState<Cards> {
     }
 
     /**
-     * this method returns whether the deck is empty or not
+     * This method returns whether the deck is empty or not.
      * @return true if the deck is empty and false otherwise
      */
     public boolean isDeckEmpty(){
@@ -82,7 +89,7 @@ public class PublicCardState<Cards> {
     }
 
     /**
-     * this method returns the discard's size
+     * This method returns the discard's size.
      * @return discard's size
      */
     public int discardSize(){

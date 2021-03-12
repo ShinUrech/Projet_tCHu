@@ -9,9 +9,10 @@ import java.util.Random;
 import static java.util.Objects.checkIndex;
 
 /**
+ * This class represent the "private" card state which is all the cards that players cannot have
+ * knowledge about (cards in the deck for example).
+ *
  * @author Shin Urech (327245)
- * this class represent the "private" card state which is bassically all the cards that players cannot have knowledges
- * about (cards in the deck for example).
  */
 
 public final class CardState extends PublicCardState{
@@ -28,10 +29,14 @@ public final class CardState extends PublicCardState{
     }
 
     /**
-     * this method creates the initial card setup with 5 cards that are drawn from the top of the pile to be exposed to
-     * the players
+     * This method creates the initial card setup with 5 cards that are drawn from the top of the pile
+     * to be exposed to the players.
+     *
      * @param deck is the game deck
-     * @return a new card state which has 5 "public cards", the card deck without the 5 public cards and an empty discard
+     * @throws IllegalArgumentException if the deck size is less than 5
+     *
+     * @return a new card state which has 5 "face-up cards", the card deck without the 5 public cards
+     * and an empty discard.
      */
 
     public CardState of(Deck<Card> deck){
@@ -41,8 +46,13 @@ public final class CardState extends PublicCardState{
     }
 
     /**
-     * this method draws a card from the 5 public cards on a given index and replaces it with the top card from the deck
+     * This method draws a card from the 5 public cards on a given index and replaces it with the top
+     * card from the deck.
+     *
      * @param slot is the slot of the card we choose from the 5 "public" cards
+     * @throws NullPointerException if slot is not within the bounds
+     * @throws IllegalArgumentException if the deck is empty
+     *
      * @return a new CardState with a new card at the index number slot
      */
 
@@ -58,7 +68,10 @@ public final class CardState extends PublicCardState{
     }
 
     /**
-     * this method returns the top card of the game deck
+     * This method returns the top card of the game deck.
+     *
+     * @throws IllegalArgumentException if the deck is empty
+     *
      * @return returns the top card of the deck
      */
     public Card topDeckCard(){
@@ -67,7 +80,10 @@ public final class CardState extends PublicCardState{
     }
 
     /**
-     * this method returns a new CardState without the top Card
+     * This method returns a new CardState without the top Card.
+     *
+     * @throws IllegalArgumentException if the deck is empty
+     *
      * @return new CardState without the top card
      */
     public CardState withOutTopDeckCard(){
@@ -76,8 +92,11 @@ public final class CardState extends PublicCardState{
     }
 
     /**
-     * this method returns a new Cardstate made out of all the discards
+     * This method returns a new CardState made out of all the discards.
+     *
      * @param rng is a random parameter for a fair shuffle
+     * @throws IllegalArgumentException if the deck is empty
+     *
      * @return a new CardState made out of all previously disposed cards
      */
     public CardState withDeckRecreatedFromDiscards(Random rng){
@@ -86,8 +105,10 @@ public final class CardState extends PublicCardState{
     }
 
     /**
-     * A method that adds given cards to a discards list
+     * A method that adds given cards to a discards list.
+     *
      * @param additionalDiscards a list of given cards to discard
+     *
      * @return a new CardState with added discards
      */
     public CardState withMoreDiscardedCards(SortedBag<Card> additionalDiscards){

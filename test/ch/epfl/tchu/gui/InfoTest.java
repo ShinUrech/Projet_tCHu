@@ -80,9 +80,8 @@ public class InfoTest {
         List<String> names = new ArrayList<String>();
         names.add("a");
         names.add("b");
-        names.add("c");
 
-        assertEquals("\na et b et c sont ex æqo avec 5 points !\n", Info.draw(names, 5));
+        assertEquals("\na et b sont ex æqo avec 5 points !\n", Info.draw(names, 5));
     }
 
     @Test

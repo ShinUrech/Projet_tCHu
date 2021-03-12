@@ -3,10 +3,10 @@ package ch.epfl.tchu.game;
 import java.util.List;
 
 /**
- * list of all possible colors for each card type (NULL being for
+ * List of all possible colors for each card type (NULL being for
  * locomotives)
  *
- * @author Shin Urech (327245)
+ * @author Shin Urech (327245).
  */
 
 public enum Color {
@@ -21,12 +21,12 @@ public enum Color {
     WHITE;
 
     /**
-     * list of all possible colors
+     * List of all possible colors.
      */
     public static final List<Color> ALL = List.of(Color.values());
 
     /**
-     * returns the amount of available colors
+     * The amount of available colors.
      */
     public static final int COUNT = ALL.size();
 
