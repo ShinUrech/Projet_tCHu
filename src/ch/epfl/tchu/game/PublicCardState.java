@@ -1,6 +1,8 @@
 package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.Preconditions;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.checkIndex;
@@ -31,8 +33,11 @@ public class PublicCardState {
 
         Preconditions.checkArgument(faceUpCards.size() == 5);
         Preconditions.checkArgument(deckSize >= 0 && discardsSize >= 0);
-
-        this.faceUpCards = faceUpCards;
+        ArrayList<Card> temp = new ArrayList<>();
+        for(int i = 0; i < faceUpCards.size(); ++i) {
+            temp.add(i, faceUpCards.get(i));
+        }
+        this.faceUpCards = temp;
         this.deckSize = deckSize;
         this.discardsSize = discardsSize;
 

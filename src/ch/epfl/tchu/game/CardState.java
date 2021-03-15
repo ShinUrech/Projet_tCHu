@@ -105,7 +105,8 @@ public final class CardState extends PublicCardState{
      */
     public CardState withDeckRecreatedFromDiscards(Random rng){
         Preconditions.checkArgument(deck.isEmpty());
-        return of(Deck.of(this.discards, rng));
+        Deck<Card> newDeck = deck.of(this.discards, rng);
+        return new CardState(newDeck.withoutTopCards(5), null, newDeck.topCards(Constants.FACE_UP_CARDS_COUNT));
     }
 
     /**
