@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public final class Deck<C extends Comparable<C>> {
 
-    public final List<C> DECK;
+    private final List<C> DECK;
 
     /**
      * This class creates and Shuffles the deck of cards.

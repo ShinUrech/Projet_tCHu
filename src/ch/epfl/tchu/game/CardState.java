@@ -17,15 +17,15 @@ import static java.util.Objects.checkIndex;
 
 public final class CardState extends PublicCardState{
 
-    public final Deck<Card> deck;
+    private final Deck<Card> deck;
     private final SortedBag<Card> discards;
     private final List<Card> faceUpCards;
 
-    private CardState(Deck<Card> deck, SortedBag<Card> discards, List<Card> faceUpCards){
+    private CardState(Deck<Card> deck, SortedBag<Card> discards, List<Card> FaceUpCards){
 
-        super(faceUpCards, deck.size(), discards.size());
+        super(FaceUpCards, deck.size(), discards.size());
 
-        this.faceUpCards = faceUpCards;
+        this.faceUpCards = FaceUpCards;
 
         this.deck = deck;
         this.discards = discards;
@@ -44,7 +44,7 @@ public final class CardState extends PublicCardState{
 
     public static CardState of(Deck<Card> deck){
         Preconditions.checkArgument(deck.size() >= 5);
-        return new CardState(deck.withoutTopCards(5), SortedBag.of(), deck.topCards(5));
+        return new CardState(deck.withoutTopCards(5), SortedBag.of(), deck.topCards(5).toList());
 
     }
 
@@ -68,7 +68,7 @@ public final class CardState extends PublicCardState{
         newFaceUpCards.set(slot, deck.topCard());
         Deck<Card> newDeck = deck.withoutTopCard();
 
-        return new CardState(newDeck, this.discards, SortedBag.of(newFaceUpCards));
+        return new CardState(newDeck, this.discards, newFaceUpCards);
     }
 
     /**
@@ -92,7 +92,7 @@ public final class CardState extends PublicCardState{
      */
     public CardState withoutTopDeckCard(){
         Preconditions.checkArgument(!deck.isEmpty());
-        return new CardState(deck.withoutTopCard(), this.discards, SortedBag.of(this.faceUpCards()));
+        return new CardState(deck.withoutTopCard(), this.discards, this.faceUpCards());
     }
 
     /**
@@ -106,7 +106,7 @@ public final class CardState extends PublicCardState{
     public CardState withDeckRecreatedFromDiscards(Random rng){
         Preconditions.checkArgument(deck.isEmpty());
         Deck<Card> newDeck = deck.of(this.discards, rng);
-        return new CardState(newDeck, SortedBag.of(), SortedBag.of(this.faceUpCards));
+        return new CardState(newDeck, SortedBag.of(), this.faceUpCards);
     }
 
     /**
@@ -122,7 +122,7 @@ public final class CardState extends PublicCardState{
         builder.add(additionalDiscards);
         builder.add(this.discards);
 
-        return new CardState(this.deck, builder.build(), SortedBag.of(this.faceUpCards()));
+        return new CardState(this.deck, builder.build(), this.faceUpCards());
 
     }
 
