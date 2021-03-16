@@ -53,6 +53,39 @@ public final class CardStateTest {
     void cardStateWithDrawnFaceUpCardCorrectlyReplacesIt() {
         var cards = allCards();
 
+        /*var deck = Deck.of(cards, new Random(0));
+
+        //first shuffled deck
+        for (int a = 0; a < deck.DECK.size(); a++){
+            System.out.println(deck.DECK.get(a));
+        }
+
+        System.out.println();
+
+        var cardState = CardState.of(deck);
+
+        //without 5 top cards
+        for (int a = 0; a < cardState.deck.size(); a++){
+            System.out.println(cardState.deck.DECK.get(a));
+        }
+
+        System.out.println();
+        //face up cards before drawing
+        System.out.println(cardState.faceUpCards());
+
+        System.out.println();
+
+        cardState = cardState.withDrawnFaceUpCard(2);
+
+        //face up cards after drawing
+        System.out.println();
+
+        System.out.println(cardState.faceUpCards());
+        */
+
+
+
+
         for (int i = 0; i < 10; i++) {
             var deck = Deck.of(cards, new Random(-i));
 
@@ -68,7 +101,11 @@ public final class CardStateTest {
             var slots = new ArrayList<>(List.of(0, 1, 2, 3, 4));
             Collections.shuffle(slots, new Random(i * i));
             for (int slot : slots) {
+                System.out.println(cardState.faceUpCards());
+                System.out.println();
                 cardState = cardState.withDrawnFaceUpCard(slot);
+                System.out.println(cardState.faceUpCards());
+                System.out.println(slot);
                 assertEquals(next5It.next(), cardState.faceUpCard(slot));
             }
         }

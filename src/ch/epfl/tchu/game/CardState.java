@@ -17,15 +17,15 @@ import static java.util.Objects.checkIndex;
 
 public final class CardState extends PublicCardState{
 
-    private final Deck<Card> deck;
+    public final Deck<Card> deck;
     private final SortedBag<Card> discards;
-    private final List<Card> faceUpCardsPrivate;
+    private final List<Card> faceUpCards;
 
     private CardState(Deck<Card> deck, SortedBag<Card> discards, SortedBag<Card> FaceUpCards){
 
-        super(List.copyOf(FaceUpCards.toList()), deck.size(), discards.size());
+        super(FaceUpCards.toList(), deck.size(), discards.size());
 
-        faceUpCardsPrivate = FaceUpCards.toList();
+        this.faceUpCards = FaceUpCards.toList();
 
         this.deck = deck;
         this.discards = discards;
@@ -64,7 +64,7 @@ public final class CardState extends PublicCardState{
         checkIndex(slot,5);
         Preconditions.checkArgument(!deck.isEmpty());
 
-        List<Card> newFaceUpCards = faceUpCardsPrivate;
+        List<Card> newFaceUpCards = faceUpCards;
         newFaceUpCards.set(slot, deck.topCard());
         Deck<Card> newDeck = deck.withoutTopCard();
 
@@ -106,7 +106,7 @@ public final class CardState extends PublicCardState{
     public CardState withDeckRecreatedFromDiscards(Random rng){
         Preconditions.checkArgument(deck.isEmpty());
         Deck<Card> newDeck = deck.of(this.discards, rng);
-        return new CardState(newDeck.withoutTopCards(5), null, newDeck.topCards(Constants.FACE_UP_CARDS_COUNT));
+        return new CardState(newDeck, SortedBag.of(), SortedBag.of(this.faceUpCards));
     }
 
     /**
