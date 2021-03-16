@@ -21,11 +21,11 @@ public final class CardState extends PublicCardState{
     private final SortedBag<Card> discards;
     private final List<Card> faceUpCards;
 
-    private CardState(Deck<Card> deck, SortedBag<Card> discards, SortedBag<Card> FaceUpCards){
+    private CardState(Deck<Card> deck, SortedBag<Card> discards, List<Card> faceUpCards){
 
-        super(FaceUpCards.toList(), deck.size(), discards.size());
+        super(faceUpCards, deck.size(), discards.size());
 
-        this.faceUpCards = FaceUpCards.toList();
+        this.faceUpCards = faceUpCards;
 
         this.deck = deck;
         this.discards = discards;
