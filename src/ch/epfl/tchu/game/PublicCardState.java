@@ -12,6 +12,7 @@ import static java.util.Objects.checkIndex;
  * the size of the deck).
  *
  * @author Shin Urech (327245)
+ * @author Aidas Venckunas(325464)
  */
 
 public class PublicCardState {

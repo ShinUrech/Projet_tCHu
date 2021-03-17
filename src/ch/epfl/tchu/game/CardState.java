@@ -13,6 +13,7 @@ import static java.util.Objects.checkIndex;
  * knowledge about (cards in the deck for example).
  *
  * @author Shin Urech (327245)
+ * @author Aidas Venckunas (325464)
  */
 
 public final class CardState extends PublicCardState{

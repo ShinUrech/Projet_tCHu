@@ -4,6 +4,10 @@ import ch.epfl.tchu.Preconditions;
 
 import java.util.List;
 
+/**
+ * @author Aidas Venckunas (325464)
+ * @author Shin Urech (327245)
+ */
 public class PublicPlayerState {
 
     private final int ticketCount;
@@ -20,12 +24,12 @@ public class PublicPlayerState {
      */
     public PublicPlayerState(int ticketCount, int cardCount, List<Route> routes){
 
-        Preconditions.checkArgument(cardCount >= 0 || ticketCount >= 0);
+        Preconditions.checkArgument(cardCount >= 0 && ticketCount >= 0);
 
         this.ticketCount = ticketCount;
         this.cardCount = cardCount;
         this.routes = List.copyOf(routes);
-        this.carCount = getCardCount(routes);
+        this.carCount = getCarCount(routes);
         this.claimPoints = getClaimPoints(routes);
 
     }
@@ -35,7 +39,7 @@ public class PublicPlayerState {
      * @return an int that is the amount of tickets left on a players hand
      */
     public int ticketCount(){
-        return this.ticketCount;
+        return ticketCount;
     }
 
     /**
@@ -43,7 +47,7 @@ public class PublicPlayerState {
      * @return an int that is the amount of tickets left on a player's hand
      */
     public int cardCount(){
-        return this.cardCount;
+        return cardCount;
     }
 
     /**
@@ -51,7 +55,7 @@ public class PublicPlayerState {
      * @return the list with all claimed routes
      */
     public List<Route> routes(){
-        return this.routes;
+        return routes;
     }
 
     /**
@@ -59,7 +63,7 @@ public class PublicPlayerState {
      * @return the amount of cards left in a player's hand
      */
     public int carCount(){
-        return this.cardCount;
+        return cardCount;
     }
 
 
@@ -68,7 +72,7 @@ public class PublicPlayerState {
      * @return the number of points the player claimed
      */
     public int claimPoints(){
-        return this.claimPoints;
+        return claimPoints;
     }
 
 
@@ -81,7 +85,7 @@ public class PublicPlayerState {
         return TOTAL_CLAIMPOINTS;
     }
 
-    private int getCardCount(List<Route> routes){
+    private int getCarCount(List<Route> routes){
 
         int TOTAL_LENGTH = 0;
 
