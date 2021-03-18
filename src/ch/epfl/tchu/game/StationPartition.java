@@ -14,7 +14,7 @@ import java.util.Random;
 public final class StationPartition implements StationConnectivity {
 
 
-    private final int[] stationPartition;
+    public final int[] stationPartition;
 
     /**
      * override of the connected method of the interface StationConnectivity.
@@ -28,9 +28,8 @@ public final class StationPartition implements StationConnectivity {
     @Override
     public boolean connected(Station s1,Station s2){
 
-       //might need id < 0
        if((s1.id() > stationPartition.length || s2.id() > stationPartition.length )) {
-           return s1.equals(s2);
+           return s1.id() == s2.id();
        }
 
         return stationPartition[s1.id()] == stationPartition[s2.id()];
@@ -43,7 +42,7 @@ public final class StationPartition implements StationConnectivity {
 
     public static final class Builder {
 
-        private int[] partitionBuilder;
+        public int[] partitionBuilder;
 
         /**
          * public constructor for the station partition builder
@@ -87,7 +86,7 @@ public final class StationPartition implements StationConnectivity {
             while(!allConnectedToRepresentatives) {
                 allConnectedToRepresentatives = true;
 
-                for (int i : partitionBuilder) {
+                for (int i = 0; i < partitionBuilder.length; ++i) {
 
                     if(representative(i) != i){
                         partitionBuilder[i] = partitionBuilder[representative(i)];
@@ -100,9 +99,6 @@ public final class StationPartition implements StationConnectivity {
 
             return new StationPartition(partitionBuilder);
         }
-
-
-
     }
 
 }
