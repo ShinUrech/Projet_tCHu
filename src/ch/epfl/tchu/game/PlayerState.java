@@ -30,7 +30,7 @@ public final class PlayerState extends PublicPlayerState{
 
         this.tickets = tickets;
         this.cards = cards;
-        this.routes = routes;
+        this.routes = List.copyOf(routes);
     }
 
     /**
