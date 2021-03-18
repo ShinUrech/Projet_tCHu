@@ -37,10 +37,14 @@ public final class PlayerState extends PublicPlayerState{
      * A static method that makes an initial Player State at the very start of the game.
      *
      * @param initialCards initial cards that a player has
+     * @throws IllegalArgumentException if the number of initial cards is not equal to 4
      *
      * @return a Player State with no tickets or routes, only initial cards
      */
     public static PlayerState initial(SortedBag<Card> initialCards){
+
+        Preconditions.checkArgument(initialCards.size() == Constants.INITIAL_CARDS_COUNT);
+
         return new PlayerState(SortedBag.of(), initialCards, List.of());
     }
 
@@ -247,7 +251,8 @@ public final class PlayerState extends PublicPlayerState{
      */
     public PlayerState withClaimedRoute(Route route, SortedBag<Card> claimCards){
 
-        List<Route> newRoutes = routes;
+        List<Route> newRoutes = new ArrayList<>();
+        newRoutes.addAll(routes);
         newRoutes.add(route);
 
         SortedBag<Card> newCards = cards.difference(claimCards);
