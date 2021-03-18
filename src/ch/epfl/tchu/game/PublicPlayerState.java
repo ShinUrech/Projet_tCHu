@@ -5,6 +5,8 @@ import ch.epfl.tchu.Preconditions;
 import java.util.List;
 
 /**
+ * A class that represents elements of Player state that are visible publicly.
+ *
  * @author Aidas Venckunas (325464)
  * @author Shin Urech (327245)
  */
@@ -17,9 +19,11 @@ public class PublicPlayerState {
     private final int carCount;
 
     /**
-     * this is the public constructor for the public player state
+     * This is the public constructor for the public player state.
+     *
      * @param ticketCount is the amount of tickets a player owns
      * @param cardCount is the amount of cards a player owns
+     * @throws IllegalArgumentException if the ticket or card count is negative
      * @param routes is the list of all claimed routes by the player
      */
     public PublicPlayerState(int ticketCount, int cardCount, List<Route> routes){
@@ -35,7 +39,7 @@ public class PublicPlayerState {
     }
 
     /**
-     * this method returns the amount of tickets the player has
+     * This method returns the amount of tickets the player has.
      * @return an int that is the amount of tickets left on a players hand
      */
     public int ticketCount(){
@@ -43,7 +47,7 @@ public class PublicPlayerState {
     }
 
     /**
-     * this method returns the amount of cards the player has
+     * This method returns the amount of cards the player has.
      * @return an int that is the amount of tickets left on a player's hand
      */
     public int cardCount(){
@@ -51,7 +55,7 @@ public class PublicPlayerState {
     }
 
     /**
-     * this method returns a list with all routes claimed by the player
+     * This method returns a list with all routes claimed by the player.
      * @return the list with all claimed routes
      */
     public List<Route> routes(){
@@ -59,16 +63,16 @@ public class PublicPlayerState {
     }
 
     /**
-     * this method returns the total amount of cards left in a player's hand
+     * This method returns the total amount of cards left in a player's hand.
      * @return the amount of cards left in a player's hand
      */
     public int carCount(){
-        return cardCount;
+        return carCount;
     }
 
 
     /**
-     * returns the amount of points the player claimed during the game
+     * Returns the amount of points the player claimed during the game.
      * @return the number of points the player claimed
      */
     public int claimPoints(){
@@ -80,7 +84,7 @@ public class PublicPlayerState {
     private int getClaimPoints(List<Route> routes){
         int TOTAL_CLAIMPOINTS = 0;
         for(Route route: routes){
-            TOTAL_CLAIMPOINTS =+ route.claimPoints();
+            TOTAL_CLAIMPOINTS += route.claimPoints();
         }
         return TOTAL_CLAIMPOINTS;
     }
@@ -90,7 +94,7 @@ public class PublicPlayerState {
         int TOTAL_LENGTH = 0;
 
         for(Route route: routes){
-            TOTAL_LENGTH  =+ route.length();
+            TOTAL_LENGTH  += route.length();
         }
         return Constants.INITIAL_CAR_COUNT - TOTAL_LENGTH;
     }

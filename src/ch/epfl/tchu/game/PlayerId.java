@@ -3,7 +3,8 @@ package ch.epfl.tchu.game;
 import java.util.List;
 
 /**
- * this class represents all player's ID (2 for this game)
+ * This class represents all player's ID (2 for this game).
+ *
  * @author Shin Urech (327245)
  */
 
@@ -13,17 +14,17 @@ public enum PlayerId {
     PLAYER_2;
 
     /**
-     * List that consists of all player IDs
+     * List that consists of all player IDs.
      */
     public static final List<PlayerId> ALL = List.of(PlayerId.values());
 
     /**
-     * number of players that are involved in a game
+     * Number of players that are involved in a game.
      */
     public static final int COUNT = ALL.size();
 
     public PlayerId next(){
-        if(this.ordinal() < COUNT) {
+        if(this.ordinal() < COUNT - 1) {
             return ALL.get(this.ordinal() + 1);
         }else{
            return ALL.get(0);

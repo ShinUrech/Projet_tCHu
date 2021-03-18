@@ -306,7 +306,7 @@ public final class PlayerState extends PublicPlayerState{
 
     /**
      * A method that returns players' final points.
-     * @return points given by claimed routes added with points given by tickets.
+     * @return points given by claimed routes added with points given by tickets
      */
     public int finalPoints(){
         return claimPoints() + ticketPoints();
