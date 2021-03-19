@@ -557,7 +557,131 @@ public class PlayerStateTest {
 
     @Test
     void possibleAdditionalClaimCardsWorksOnColorRoute(){
-        
+        //For the routes
+        var s1 = new Station(0, "Lausanne");
+        var s2 = new Station(1, "EPFL");
+        var id = "id";
+
+        //Generate all possible claim cards possibilities
+        //var allPossibilities = new ArrayList<SortedBag<Card>>();
+        for (int l = 1; l <= Constants.MAX_ROUTE_LENGTH; ++l){
+            for (int locomotives = 0; locomotives <= l; ++locomotives){
+                for (Card colorCard : CAR_CARDS){
+                    //allPossibilities.add(SortedBag.of(l-locomotives, colorCard, locomotives, Card.LOCOMOTIVE));
+                    var initCards = SortedBag.of(l-locomotives, colorCard, locomotives, Card.LOCOMOTIVE);
+
+                    //Build cards that will be given to the playerState1 ---> expected will be only Locos
+                    var cards1Builder = new SortedBag.Builder<Card>();
+                    cards1Builder.add(l-locomotives, colorCard);
+                    cards1Builder.add(locomotives + Constants.ADDITIONAL_TUNNEL_CARDS, Card.LOCOMOTIVE);
+                    var cards1 = cards1Builder.build();
+
+                    //Build cards that will be given to the playerState2 ----> expected will be colored cards and Locos
+                    var cards2Builder = new SortedBag.Builder<Card>();
+                    cards2Builder.add((l-locomotives) + Constants.ADDITIONAL_TUNNEL_CARDS, colorCard);
+                    cards2Builder.add(locomotives + Constants.ADDITIONAL_TUNNEL_CARDS, Card.LOCOMOTIVE);
+                    var cards2 = cards2Builder.build();
+
+                    //Build cards that will be given to the playerState3 ----> expected will be only colored cards
+                    var cards3Builder = new SortedBag.Builder<Card>();
+                    cards3Builder.add((l-locomotives) + Constants.ADDITIONAL_TUNNEL_CARDS, colorCard);
+                    cards3Builder.add(locomotives, Card.LOCOMOTIVE);
+                    var cards3 = cards3Builder.build();
+
+                    //drawnX ---> Arbitrary drawnCard
+                    var drawn = new ArrayList<SortedBag<Card>>();
+                    drawn.add(SortedBag.of(Constants.ADDITIONAL_TUNNEL_CARDS ,colorCard)); // Will require 0 additionalCards
+                    drawn.add(SortedBag.of(1, colorCard, 2,CAR_CARDS.get((colorCard.ordinal()+1) % CAR_CARDS.size()))); // will require 1 additional card
+                    drawn.add(SortedBag.of(2, Card.LOCOMOTIVE, 1,CAR_CARDS.get(colorCard.ordinal() % CAR_CARDS.size()))); // will require 2 additional card
+                    drawn.add(SortedBag.of(Constants.ADDITIONAL_TUNNEL_CARDS, Card.LOCOMOTIVE));
+
+                    //PlayerState
+                    var playerState1 = new PlayerState(SortedBag.of(), cards1, List.of());
+                    var playerState2 = new PlayerState(SortedBag.of(), cards2, List.of());
+                    var playerState3 = new PlayerState(SortedBag.of(), cards3, List.of());
+
+                    //PlayableCards : pc[cards][drawn] ---> all possibilites with the different cards (of the player) and drawn cards (of the deck) --> 15 possibilities
+                    var pc = new ArrayList<SortedBag.Builder<Card>>();
+                    pc.add(new SortedBag.Builder<>());
+                    pc.add(new SortedBag.Builder<>());
+                    pc.add(new SortedBag.Builder<>());
+
+
+
+                    //Take all loco that the player has in a playableCards and remove them from newCards
+                    var newCards = cards1.difference(initCards);
+                    pc.get(0).add(newCards.countOf(Card.LOCOMOTIVE), Card.LOCOMOTIVE);
+                    newCards = newCards.difference(pc.get(0).build());
+                    //Add the other cards that must be added (for colored cards)
+                    for (Card type : initCards.toSet()){
+                        for (Card d : drawn.get(0)){
+                            if ((d.equals(type) || d.equals(Card.LOCOMOTIVE)) && newCards.contains(type)){
+                                pc.get(0).add(newCards.countOf(type), type);
+                                newCards = newCards.difference(SortedBag.of(newCards.countOf(type), type));
+                            }
+                        }
+                    }
+
+                    newCards = cards2.difference(initCards);
+                    pc.get(1).add(newCards.countOf(Card.LOCOMOTIVE), Card.LOCOMOTIVE);
+                    newCards = newCards.difference(pc.get(1).build());
+                    //Add the other cards that must be added (for colored cards)
+                    for (Card type : initCards.toSet()){
+                        for (Card d : drawn.get(1)){
+                            if ((d.equals(type)||d.equals(Card.LOCOMOTIVE)) && newCards.contains(type)){
+                                pc.get(1).add(newCards.countOf(type), type);
+                                newCards = newCards.difference(SortedBag.of(newCards.countOf(type), type));
+                            }
+                        }
+                    }
+
+                    newCards = cards3.difference(initCards);
+                    pc.get(2).add(newCards.countOf(Card.LOCOMOTIVE), Card.LOCOMOTIVE);
+                    newCards = newCards.difference(pc.get(2).build());
+                    //Add the other cards that must be added (for colored cards)
+                    for (Card type : initCards.toSet()){
+                        for (Card d : drawn.get(2)){
+                            if ((d.equals(type)||d.equals(Card.LOCOMOTIVE)) && newCards.contains(type)){
+                                pc.get(2).add(newCards.countOf(type), type);
+                                newCards = newCards.difference(SortedBag.of(newCards.countOf(type), type));
+                            }
+                        }
+                    }
+
+                    //Expected : expected_cardsX_drawnX ---> all possibilites with the different cards (of the player) and drawn cards (of the deck)
+                    var expected = new ArrayList<ArrayList<SortedBag<Card>>>();
+                    for (int i = 0; i < pc.size(); ++i){
+                        for (int j = 0; j < drawn.size(); ++j){
+
+                            var route = new Route(id, s1, s2, l, Route.Level.UNDERGROUND, null);
+                            var additionalCardsCount = route.additionalClaimCardsCount(initCards, drawn.get(j));
+                            var options = (additionalCardsCount <= pc.get(i).size()) ?
+                                    new ArrayList<>(pc.get(i).build().subsetsOfSize(additionalCardsCount))
+                                    : new ArrayList<>(pc.get(i).build().subsetsOfSize(0));
+                            options.sort(Comparator.comparing(cs -> cs.countOf(Card.LOCOMOTIVE)));
+                            expected.add(options);
+                        }
+                    }
+                    var playerState = List.of(playerState1, playerState2, playerState3);
+                    for (int j = 0; j < playerState.size(); ++j) {
+                        for (int i = 0; i < drawn.size(); ++i) {
+                            var route = new Route(id, s1, s2, l, Route.Level.UNDERGROUND, null);
+                            var additionalCardsCount = route.additionalClaimCardsCount(initCards, drawn.get(i));
+                            System.out.println("player cards : " + playerState.get(j).cards().toString());
+                            System.out.println("init cards: " + initCards.toString());
+                            System.out.println("drawn cards : " + drawn.get(i).toString());
+                            System.out.println("all playable cards : " + pc.get(j).build().toString());
+                            System.out.println("expected" +(int)(i+(drawn.size()*j))+ ": " + expected.get(i+ (drawn.size()*j)));
+                            System.out.println();
+                            if (additionalCardsCount > 0)
+                                assertEquals(expected.get(i + (drawn.size()*j)), playerState.get(j).possibleAdditionalCards(additionalCardsCount, initCards, drawn.get(i)));
+                        }
+                    }
+                    if (locomotives == l)
+                        break;
+                }
+            }
+        }
     }
 
     @Test
@@ -595,22 +719,13 @@ public class PlayerStateTest {
         SortedBag<Card> cardsTest = SortedBag.of(cardsOfThePlayer);
         PlayerState playerTest1 = new PlayerState( SortedBag.of(ticketsOfThePlayer), cardsTest, routesOfThePlayer);
 
-        for(Route a : routesOfThePlayer){
-            System.out.println(a);
-        }
-
-        System.out.println();
-
         routesOfThePlayer.add(routeTest);
-        for(Route a : routesOfThePlayer){
-            System.out.println(a);
-        }
         cardsOfThePlayer.remove(Card.BLUE);
         SortedBag<Card> cardsTest2 = SortedBag.of(cardsOfThePlayer);
         PlayerState playerTest2 = new PlayerState( SortedBag.of(ticketsOfThePlayer), cardsTest2, routesOfThePlayer);
 
-        assertEquals(playerTest2.routes(), playerTest1.withClaimedRoute(routeTest, SortedBag.of(Card.BLUE)).routes());
-        assertEquals(playerTest2.cards(), playerTest1.withClaimedRoute(routeTest, SortedBag.of(Card.BLUE)).cards());
+        assertArrayEquals(playerTest2.routes().toArray(), playerTest1.withClaimedRoute(routeTest, SortedBag.of(Card.BLUE)).routes().toArray());
+        assertArrayEquals(playerTest2.cards().toList().toArray(), playerTest1.withClaimedRoute(routeTest, SortedBag.of(Card.BLUE)).cards().toList().toArray());
     }
 
 //ticketPoints()

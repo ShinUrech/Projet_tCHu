@@ -26,7 +26,7 @@ public final class PlayerState extends PublicPlayerState{
      * @param routes routes that player possesses
      */
     public PlayerState(SortedBag<Ticket> tickets, SortedBag<Card> cards, List<Route> routes){
-        super(tickets.size(), cards.size(), routes);
+        super(tickets.size(), cards.size(), List.copyOf(routes));
 
         this.tickets = tickets;
         this.cards = cards;
@@ -283,19 +283,23 @@ public final class PlayerState extends PublicPlayerState{
 
         StationPartition.Builder builder = new StationPartition.Builder(maxID);
 
+        for(Route a : routes){
+            builder.connect(a.station1(), a.station2());
+        }
+
         for(int a = 0; a < routes.size(); a++){
             for (int b = a; b < routes.size(); b++){
                 if(routes.get(a).station1().equals(routes.get(b).station1())){
-                    builder.connect(routes.get(a).station1(), routes.get(b).station1());
+                    builder.connect(routes.get(a).station2(), routes.get(b).station2());
                 }
-                else if(routes.get(a).station1() == routes.get(b).station2()){
-                    builder.connect(routes.get(a).station1(), routes.get(b).station2());
-                }
-                else if(routes.get(a).station2() == routes.get(b).station1()){
+                else if(routes.get(a).station1().equals(routes.get(b).station2())){
                     builder.connect(routes.get(a).station2(), routes.get(b).station1());
                 }
-                else if(routes.get(a).station2() == routes.get(b).station2()){
-                    builder.connect(routes.get(a).station2(), routes.get(b).station2());
+                else if(routes.get(a).station2().equals(routes.get(b).station1())){
+                    builder.connect(routes.get(a).station1(), routes.get(b).station2());
+                }
+                else if(routes.get(a).station2().equals(routes.get(b).station2())){
+                    builder.connect(routes.get(a).station1(), routes.get(b).station1());
                 }
             }
         }
