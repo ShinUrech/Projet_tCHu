@@ -544,7 +544,7 @@ public class PlayerStateTest {
     }
 
     @Test
-    void possibleAdditionalClaimCardsThrowsIllegalArgumentDeckOutOfRange(){ //Range is exactly 3
+    void possibleAdditionalClaimCardsT§hrowsIllegalArgumentDeckOutOfRange(){ //Range is exactly 3
         var playerState = new PlayerState(SortedBag.of(), SortedBag.of(), List.of());
         assertThrows(IllegalArgumentException.class, () -> {
             playerState.possibleAdditionalCards(2, SortedBag.of(4,Card.BLUE), SortedBag.of(2, Card.BLUE));
