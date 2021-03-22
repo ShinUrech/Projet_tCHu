@@ -88,7 +88,7 @@ public final class GameState extends PublicGameState{
      */
     public GameState withoutTopTickets(int count){
         checkCount(count);
-        return new GameState(tickets.withoutTopCards(count), this.cardState, this.currentPlayerId(), this.playerState, this.lastPlayer());
+        return new GameState(tickets.withoutTopCards(count), cardState, currentPlayerId(), playerState, lastPlayer());
     }
 
     /**
@@ -105,7 +105,7 @@ public final class GameState extends PublicGameState{
      * @return a new GameState that is almost identical to the input except that the discard contains more discarded cards
      */
     public GameState withMoreDiscardedCards(SortedBag<Card> discardedCards){
-        return new GameState(this.tickets, this.cardState.withMoreDiscardedCards(discardedCards), currentPlayerId(), this.playerState, lastPlayer());
+        return new GameState(tickets, cardState.withMoreDiscardedCards(discardedCards), currentPlayerId(), playerState, lastPlayer());
     }
 
     /**
@@ -117,7 +117,7 @@ public final class GameState extends PublicGameState{
     public GameState withCardsDeckRecreatedIfNeeded(Random rng){
 
         if(this.cardState.isDeckEmpty()){
-            return new GameState(this.tickets, this.cardState.withDeckRecreatedFromDiscards(rng), currentPlayerId(), this.playerState, lastPlayer());
+            return new GameState(tickets, cardState.withDeckRecreatedFromDiscards(rng), currentPlayerId(), playerState, lastPlayer());
         } else {
             return this;
         }
@@ -131,11 +131,9 @@ public final class GameState extends PublicGameState{
      * @return a new GameState with tickets added to the player's CardState
      */
     public GameState withInitiallyChosenTickets(PlayerId playerId, SortedBag<Ticket> chosenTickets){
-        Preconditions.checkArgument(playerState.get(playerId).tickets().size() == 0);
+        Preconditions.checkArgument(playerState(playerId).tickets().size() == 0);
 
-        playerState.get(playerId).withAddedTickets(chosenTickets);
-
-        return new GameState(this.tickets, this.cardState, currentPlayerId(), this.playerState, lastPlayer());
+        return new GameState(tickets, cardState, currentPlayerId(), changeTickets(playerId, chosenTickets), lastPlayer());
     }
 
     /**
@@ -154,31 +152,97 @@ public final class GameState extends PublicGameState{
     }
 
     /**
-     *
-     * @param slot
-     * @return
+     *this method returns an identical gameState except that the faceup card at the index slot is now on the current player's
+     * hand and a card picked up from the top of the deck has replaced the card at the index slot
+     * @param slot is the slot of the card that has been picked
+     * @return new game state with a new faceup card and a new card on the player's hand
      */
     public GameState withDrawnFaceUpCard(int slot){
         Preconditions.checkArgument(canDrawCards());
 
-        playerState.replace(currentPlayerId(), playerState.get(currentPlayerId()).withAddedCard(cardState.faceUpCard(slot)));
-        return new GameState(tickets,cardState.withDrawnFaceUpCard(slot), currentPlayerId(), playerState, lastPlayer());
+        return new GameState(tickets,cardState.withDrawnFaceUpCard(slot), currentPlayerId(), changeCardState(currentPlayerId(), cardState.faceUpCard(slot)), lastPlayer());
     }
 
+    /**
+     * this method picks the top deck card from the deck and gives it to the current player
+     * @return a new gameState with a new deck and a new cardState for the current player
+     */
+    public GameState withBlindlyDrawnCard(){
+        Preconditions.checkArgument(canDrawCards());
+
+        return new GameState(tickets, cardState.withoutTopDeckCard(), currentPlayerId(), changeCardState(currentPlayerId(), cardState.topDeckCard()), lastPlayer());
+    }
+
+    /**
+     * this method adds a new route to the player state with some claim cards
+     * @param route route that is been claimed
+     * @param cards cards used to claim the route
+     * @return a new game state with attributes modified
+     */
+    public GameState withClaimedRoute(Route route, SortedBag<Card> cards){
+        return new GameState(tickets, cardState, currentPlayerId(), changeRoute(currentPlayerId(), route, cards), lastPlayer());
+    }
+
+    /**
+     * this method determines whether the last turn can begin or not
+     * @return true iff the current player has two cards or less
+     */
+    public boolean lastTurnBegins(){
+        if(playerState(currentPlayerId()).cards().size() <= 2){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * this method returns a new game state that represents the next turn of the game
+     * @return the new current player is the next of the current player and if it is the final turn the current player becomes the final one
+     */
+    public GameState forNextTurn(){
+        if(!this.lastTurnBegins()) {
+            return new GameState(tickets, cardState, currentPlayerId(), playerState, currentPlayerId());
+
+        }else{
+            return new GameState(tickets, cardState, currentPlayerId().next(), playerState, lastPlayer().next());
+        }
+    }
 
 
     private void checkCount(int count){
         Preconditions.checkArgument(count >= 0 || count <= tickets.size());
     }
 
-    private Map<PlayerId, PlayerState> changeCardState(PlayerId player, SortedBag<Card> cards){
+    private Map<PlayerId, PlayerState> changeCardState(PlayerId player, Card card){
         Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(PlayerId.class);
         newPlayerState.putAll(playerState);
 
-        PlayerState toBeModified = playerState.get(player);
-        toBeModified.withAddedCards(cards);
+        PlayerState toBeModified = playerState(player);
+        toBeModified.withAddedCard(card);
         newPlayerState.replace(player, toBeModified);
 
         return newPlayerState;
+    }
+
+    private Map<PlayerId, PlayerState> changeTickets(PlayerId player, SortedBag<Ticket> tickets){
+        Map<PlayerId, PlayerState> withNewTickets = new EnumMap<>(PlayerId.class);
+        withNewTickets.putAll(playerState);
+
+        PlayerState toBeModified = playerState(player);
+        toBeModified.withAddedTickets(tickets);
+
+        withNewTickets.replace(player, toBeModified);
+        return  withNewTickets;
+    }
+
+    private Map<PlayerId, PlayerState> changeRoute(PlayerId player, Route route, SortedBag<Card> cards){
+        Map<PlayerId, PlayerState> withNewRoute = new EnumMap<>(PlayerId.class);
+        withNewRoute.putAll(playerState);
+
+        PlayerState toBeModified = playerState(player);
+        toBeModified.withClaimedRoute(route, cards);
+
+        withNewRoute.replace(player, toBeModified);
+        return withNewRoute;
     }
 }
