@@ -223,17 +223,34 @@ public final class PlayerState extends PublicPlayerState{
         SortedBag<Card> availableCards = cards.difference(initialCards);
         SortedBag.Builder<Card> builder = new SortedBag.Builder<>();
         builder.add(availableCards.countOf(Card.LOCOMOTIVE), Card.LOCOMOTIVE);
+        availableCards = availableCards.difference(SortedBag.of(availableCards.countOf(Card.LOCOMOTIVE), Card.LOCOMOTIVE));
 
-        if(initialCards.toSet().size() == 2){
-            builder.add(availableCards.countOf(initialCards.get(0)), initialCards.get(0));
+        for(Card a : drawnCards){
+                if(initialCards.contains(a)){
+                    builder.add(availableCards.countOf(a), a);
+                    availableCards = availableCards.difference(SortedBag.of(availableCards.countOf(a), a));
+                }
+                if(a.equals(Card.LOCOMOTIVE)){
+                    for(Card b : initialCards){
+                        if(!b.equals(Card.LOCOMOTIVE)){
+                            builder.add(availableCards.countOf(b), b);
+                            availableCards = availableCards.difference(SortedBag.of(availableCards.countOf(b), b));
+                        }
+                    }
+                }
         }
         availableCards = builder.build();
 
-        List <SortedBag <Card>> options = new ArrayList<>(availableCards.subsetsOfSize(additionalCardsCount));
-        options.sort (
-                Comparator.comparingInt (cs -> cs.countOf (Card.LOCOMOTIVE)));
+        if(availableCards.size() >= additionalCardsCount){
+            List <SortedBag <Card>> options = new ArrayList<>(availableCards.subsetsOfSize(additionalCardsCount));
+            options.sort (
+                    Comparator.comparingInt (cs -> cs.countOf (Card.LOCOMOTIVE)));
 
-        return options;
+            return options;
+        }
+        else return List.of(SortedBag.of());
+
+
     }
 
     /**
