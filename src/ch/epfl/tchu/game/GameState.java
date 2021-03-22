@@ -21,7 +21,7 @@ public final class GameState extends PublicGameState{
 
         this.tickets = tickets;
         this.cardState = cardState;
-        this.playerState = new EnumMap<PlayerId, PlayerState>(playerState);
+        this.playerState = new EnumMap<>(PlayerId.class);
     }
 
     /**
@@ -153,6 +153,11 @@ public final class GameState extends PublicGameState{
 
     }
 
+    /**
+     *
+     * @param slot
+     * @return
+     */
     public GameState withDrawnFaceUpCard(int slot){
         Preconditions.checkArgument(canDrawCards());
 
@@ -160,8 +165,20 @@ public final class GameState extends PublicGameState{
         return new GameState(tickets,cardState.withDrawnFaceUpCard(slot), currentPlayerId(), playerState, lastPlayer());
     }
 
+
+
     private void checkCount(int count){
         Preconditions.checkArgument(count >= 0 || count <= tickets.size());
     }
 
+    private Map<PlayerId, PlayerState> changeCardState(PlayerId player, SortedBag<Card> cards){
+        Map<PlayerId, PlayerState> newPlayerState = new EnumMap<>(PlayerId.class);
+        newPlayerState.putAll(playerState);
+
+        PlayerState toBeModified = playerState.get(player);
+        toBeModified.withAddedCards(cards);
+        newPlayerState.replace(player, toBeModified);
+
+        return newPlayerState;
+    }
 }
