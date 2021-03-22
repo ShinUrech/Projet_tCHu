@@ -5,6 +5,7 @@ import ch.epfl.tchu.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *this class represents a game state with publicly available information
@@ -38,7 +39,7 @@ public class PublicGameState {
         }
 
             this.ticketsCount = ticketsCount;
-            this.cardState = cardState;
+            this.cardState = Objects.requireNonNull(cardState);
             this.currentPlayerId = currentPlayerId;
             this.playerState = Map.copyOf(playerState);
             this.lastPlayer = lastPlayer;
@@ -119,8 +120,9 @@ public class PublicGameState {
 
         List<Route> list = new ArrayList<>();
 
-        list.addAll(playerState.get(currentPlayerId).routes());
-        list.addAll(playerState.get(currentPlayerId).routes());
+        for(Map.Entry<PlayerId, PublicPlayerState> entry: playerState.entrySet()){
+            list.addAll(playerState.get(entry).routes());
+        }
 
         return list;
     }
