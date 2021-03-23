@@ -31,7 +31,8 @@ public final class StationPartition implements StationConnectivity {
     @Override
     public boolean connected(Station s1,Station s2){
 
-       if((s1.id() > stationPartition.length || s2.id() > stationPartition.length )) {
+       if((s1.id() >= stationPartition.length || s2.id() >= stationPartition.length )) {
+           System.out.println(s1.name() + " " + s2.name());
            return s1.id() == s2.id();
        }
 
@@ -59,7 +60,7 @@ public final class StationPartition implements StationConnectivity {
 
             partitionBuilder = new int[stationCount];
 
-            for(int i= 0; i < stationCount; ++i){
+            for(int i = 0; i < stationCount; ++i){
                 partitionBuilder[i] = i;
             }
         }
@@ -76,9 +77,22 @@ public final class StationPartition implements StationConnectivity {
          *
          * @return the builder after modification
          */
-        public Builder connect(Station s1, Station s2){
+        public Builder connect(Station s1, Station s2) {
 
             partitionBuilder[representative(s1.id())] = representative(s2.id());
+
+            boolean flat = false;
+
+            while(!flat){
+                flat = true;
+                for(int i = 0; i < partitionBuilder.length; ++i){
+                    if(representative(representative(i)) != representative(i)) {
+                        flat = false;
+                        partitionBuilder[i] = representative(representative(i));
+                    }
+                }
+            }
+
             return this;
         }
 
@@ -89,18 +103,14 @@ public final class StationPartition implements StationConnectivity {
          */
         public StationPartition build(){
 
-            boolean allConnectedToRepresentatives = false;
+            boolean flat = false;
 
-            while(!allConnectedToRepresentatives) {
-                allConnectedToRepresentatives = true;
-
-                for (int i = 0; i < partitionBuilder.length; ++i) {
-
-                    if(representative(i) != i){
-                        partitionBuilder[i] = partitionBuilder[representative(i)];
-                    }
-                    if(partitionBuilder[representative(i)] != representative(i)){
-                        allConnectedToRepresentatives = false;
+            while(!flat){
+                flat = true;
+                for(int i = 0; i < partitionBuilder.length; ++i){
+                    if(representative(representative(i)) != representative(i)) {
+                        flat = false;
+                        partitionBuilder[i] = representative(representative(i));
                     }
                 }
             }

@@ -26,7 +26,7 @@ public final class PlayerState extends PublicPlayerState{
      * @param routes routes that player possesses
      */
     public PlayerState(SortedBag<Ticket> tickets, SortedBag<Card> cards, List<Route> routes){
-        super(tickets.size(), cards.size(), List.copyOf(routes));
+        super(tickets.size(), cards.size(), routes);
 
         this.tickets = tickets;
         this.cards = cards;
@@ -248,7 +248,7 @@ public final class PlayerState extends PublicPlayerState{
 
             return options;
         }
-        else return List.of(SortedBag.of());
+        else return List.of();
 
 
     }
@@ -264,7 +264,8 @@ public final class PlayerState extends PublicPlayerState{
      */
     public PlayerState withClaimedRoute(Route route, SortedBag<Card> claimCards){
 
-        List<Route> newRoutes = routes;
+        List<Route> newRoutes = new ArrayList<>();
+        newRoutes.addAll(routes);
         newRoutes.add(route);
 
         SortedBag<Card> newCards = cards.difference(claimCards);
@@ -291,7 +292,7 @@ public final class PlayerState extends PublicPlayerState{
                 maxID = a.station2().id();
             }
         }
-        ++maxID;
+        maxID += 1;
 
         StationPartition.Builder builder = new StationPartition.Builder(maxID);
 
