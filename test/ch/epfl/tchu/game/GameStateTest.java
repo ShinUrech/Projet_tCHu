@@ -1,9 +1,11 @@
 package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.SortedBag;
+import ch.epfl.test.TestRandomizer;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -11,10 +13,125 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameStateTest {
 
+//initial(...)
+    @Test
+    void initialWorksOnCopy(){
+        var tickets = SortedBag.of(2, ChMap.tickets().get(0), 2, ChMap.tickets().get(1));
+        var gameState = GameState.initial(tickets, TestRandomizer.newRandom());
+
+        var copyBuilder = new SortedBag.Builder<Ticket>();
+        copyBuilder.add(tickets);
+
+        //Try to clear the ticket
+        try {
+            tickets.toList().clear();
+        }catch (Exception e){
+            // do nothing
+        }
+
+        assertEquals(copyBuilder.build() ,gameState.topTickets(gameState.ticketsCount()));
+    }
+
+//playerState(...)
+    @Test
+    void playerStateWorks(){
+
+        //Init cards
+        var deck = Deck.of(Constants.ALL_CARDS, TestRandomizer.newRandom());
+        var cardsPlayer1 = deck.topCards(Constants.INITIAL_CARDS_COUNT);
+        deck = deck.withoutTopCards(Constants.INITIAL_CARDS_COUNT);
+        var cardsPlayer2 = deck.topCards(Constants.INITIAL_CARDS_COUNT);
+        deck = deck.withoutTopCards(Constants.INITIAL_CARDS_COUNT);
+        var cardState = CardState.of(deck);
+
+        //Init playerState
+        var playerState1 = PlayerState.initial(cardsPlayer1);
+        var playerState2 = PlayerState.initial(cardsPlayer2);
+
+        //Init gameState
+        var gameState = GameState.initial(SortedBag.of(ChMap.tickets()), TestRandomizer.newRandom());
+
+        //Test playerState1
+        assertEquals(playerState1.cards(), gameState.playerState(PlayerId.PLAYER_1).cards());
+        assertEquals(playerState1.tickets(), gameState.playerState(PlayerId.PLAYER_1).tickets());
+        assertEquals(playerState1.routes(), gameState.playerState(PlayerId.PLAYER_1).routes());
+        assertEquals(playerState1.ticketPoints(), gameState.playerState(PlayerId.PLAYER_1).ticketPoints());
+        assertEquals(playerState1.claimPoints(), gameState.playerState(PlayerId.PLAYER_1).claimPoints());
+
+        //Test playerState2
+        assertEquals(playerState2.cards(), gameState.playerState(PlayerId.PLAYER_2).cards());
+        assertEquals(playerState2.tickets(), gameState.playerState(PlayerId.PLAYER_2).tickets());
+        assertEquals(playerState2.routes(), gameState.playerState(PlayerId.PLAYER_2).routes());
+        assertEquals(playerState2.ticketPoints(), gameState.playerState(PlayerId.PLAYER_2).ticketPoints());
+        assertEquals(playerState2.claimPoints(), gameState.playerState(PlayerId.PLAYER_2).claimPoints());
+    }
+
+
+//currentPlayerState()
+    @Test
+    void currentPlayerStateWorks(){
+        //Init cards
+        var deck = Deck.of(Constants.ALL_CARDS, TestRandomizer.newRandom());
+        var cardsPlayer1 = deck.topCards(Constants.INITIAL_CARDS_COUNT);
+        deck = deck.withoutTopCards(Constants.INITIAL_CARDS_COUNT);
+        var cardsPlayer2 = deck.topCards(Constants.INITIAL_CARDS_COUNT);
+        deck = deck.withoutTopCards(Constants.INITIAL_CARDS_COUNT);
+        var cardState = CardState.of(deck);
+
+        //Init playerState
+        var playerState1 = PlayerState.initial(cardsPlayer1);
+        var playerState2 = PlayerState.initial(cardsPlayer2);
+
+        //Init gameState
+        var gameState = GameState.initial(SortedBag.of(ChMap.tickets()), TestRandomizer.newRandom());
+        var currentPlayer = PlayerId.ALL.get(TestRandomizer.newRandom().nextInt(PlayerId.COUNT));
+
+        if (currentPlayer == PlayerId.PLAYER_1) {
+            //Test playerState1
+            assertEquals(playerState1.cards(), gameState.playerState(PlayerId.PLAYER_1).cards());
+            assertEquals(playerState1.tickets(), gameState.playerState(PlayerId.PLAYER_1).tickets());
+            assertEquals(playerState1.routes(), gameState.playerState(PlayerId.PLAYER_1).routes());
+            assertEquals(playerState1.ticketPoints(), gameState.playerState(PlayerId.PLAYER_1).ticketPoints());
+            assertEquals(playerState1.claimPoints(), gameState.playerState(PlayerId.PLAYER_1).claimPoints());
+        } else if (currentPlayer == PlayerId.PLAYER_2) {
+            //Test playerState2
+            assertEquals(playerState2.cards(), gameState.playerState(PlayerId.PLAYER_2).cards());
+            assertEquals(playerState2.tickets(), gameState.playerState(PlayerId.PLAYER_2).tickets());
+            assertEquals(playerState2.routes(), gameState.playerState(PlayerId.PLAYER_2).routes());
+            assertEquals(playerState2.ticketPoints(), gameState.playerState(PlayerId.PLAYER_2).ticketPoints());
+            assertEquals(playerState2.claimPoints(), gameState.playerState(PlayerId.PLAYER_2).claimPoints());
+        }
+
+    }
+
+
+//topTickets(...)
+    @Test
+    void topTicketsThrowsIllegalArgument(){
+        var gameState = GameState.initial(SortedBag.of(ChMap.tickets()), TestRandomizer.newRandom());
+        assertThrows(IllegalArgumentException.class, () ->{
+           gameState.topTickets(ChMap.tickets().size()+1);
+        });
+        assertThrows(IllegalArgumentException.class, () ->{
+            gameState.topTickets(-1);
+        });
+    }
+
+    @Test
+    void topTicketsWorks(){
+        var gameState = GameState.initial(SortedBag.of(ChMap.tickets()), TestRandomizer.newRandom());
+        var expected = new ArrayList<Ticket>(ChMap.tickets());
+        Collections.shuffle(expected, TestRandomizer.newRandom());
+
+        assertEquals(SortedBag.of(expected), gameState.topTickets(expected.size()));
+        assertEquals(SortedBag.of(1, expected.get(0)), gameState.topTickets(1));
+    }
+
+//withMoreDiscardedCards(...)
     @Test
     void withMoreDiscardedCardsWorks(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), TestRandomizer.newRandom());
         GameState testedGameState1 = initialGameState.withMoreDiscardedCards(SortedBag.of(5, Card.LOCOMOTIVE,
                 11, Card.BLUE));
 
@@ -25,33 +142,35 @@ public class GameStateTest {
         assertTrue(!initialGameState.equals(testedGameState2));
     }
 
+//withCardsDeckRecreatedIfNeeded()
     @Test
     void withCardsDeckRecreatedIfNeededWorksWhenDeckIsNotEmpty(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), TestRandomizer.newRandom());
 
-        assertEquals(initialGameState, initialGameState.withCardsDeckRecreatedIfNeeded(new Random()));
+        assertEquals(initialGameState, initialGameState.withCardsDeckRecreatedIfNeeded(TestRandomizer.newRandom()));
 
     }
 
     @Test
     void withCardsDeckRecreatedIfNeededWorksWhenDeckIsEmpty(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), TestRandomizer.newRandom());
 
         while(!initialGameState.cardState().isDeckEmpty()){
             initialGameState = initialGameState.withoutTopCard();
         }
 
         initialGameState = initialGameState.withMoreDiscardedCards(SortedBag.of(11, Card.LOCOMOTIVE));
-        initialGameState = initialGameState.withCardsDeckRecreatedIfNeeded(new Random());
+        initialGameState = initialGameState.withCardsDeckRecreatedIfNeeded(TestRandomizer.newRandom());
 
         assertEquals(11, initialGameState.cardState().deckSize());
     }
 
+//withInitiallyChosenTickets(...)
     @Test
     void withInitiallyChosenTicketsWorksWithInitialGameState(){
-        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), TestRandomizer.newRandom());
         GameState withTicketGameState = initialGameState.withInitiallyChosenTickets(PlayerId.PLAYER_1,
                 SortedBag.of(TestMap.LAU_BER));
         GameState withTicketGameState2 = initialGameState.withInitiallyChosenTickets(PlayerId.PLAYER_1,
@@ -64,7 +183,7 @@ public class GameStateTest {
 
     @Test
     void withInitiallyChosenTicketsWorksWithNonInitialGameState(){
-        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(1, TestMap.LAU_STG), TestRandomizer.newRandom());
         GameState withTicketGameState = initialGameState.withInitiallyChosenTickets(PlayerId.PLAYER_1,
                 SortedBag.of(TestMap.LAU_BER));
 
@@ -75,22 +194,22 @@ public class GameStateTest {
 
     }
 
+//withChosenAdditionalTickets(...)
     @Test
     void withChosenAdditionalTicketsThrowsCorrectly(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
         GameState withTicketGameState = initialGameState.withInitiallyChosenTickets(initialGameState.currentPlayerId(),
                 SortedBag.of(TestMap.LAU_STG));
 
         assertThrows(IllegalArgumentException.class, ()-> withTicketGameState.withChosenAdditionalTickets
                 (SortedBag.of(1, TestMap.BER_STG, 1, TestMap.DE1_IT2), SortedBag.of(TestMap.LAU_STG)));
-
     }
 
     @Test
     void withChosenAdditionalTicketsWorks(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
         GameState withTicketGameState = initialGameState.withInitiallyChosenTickets(initialGameState.currentPlayerId(),
                 SortedBag.of(TestMap.LAU_STG));
 
@@ -106,10 +225,11 @@ public class GameStateTest {
 
     }
 
+//withDrawnFaceUpCard(...)
     @Test
     void withDrawnFaceUpCardWorks(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
 
         GameState changedGameState = initialGameState.withDrawnFaceUpCard(3);
 
@@ -123,7 +243,7 @@ public class GameStateTest {
     @Test
     void withDrawnFaceUpCardThrowsIllegalArgumentExceptionWhenNeeded(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
 
         while(initialGameState.cardState().deckSize() > 3){
             initialGameState = initialGameState.withoutTopCard();
@@ -135,10 +255,11 @@ public class GameStateTest {
 
     }
 
+//withBlindlyDrawnCard()
     @Test
     void withBlindlyDrawnCardWorks(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
 
         GameState changedGameState = initialGameState.withBlindlyDrawnCard();
 
@@ -152,7 +273,7 @@ public class GameStateTest {
     @Test
     void withBlindlyDrawnCardsThrowsIllegalArgumentExceptionWhenNeeded(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
 
         while(initialGameState.cardState().deckSize() > 3){
             initialGameState = initialGameState.withoutTopCard();
@@ -164,10 +285,11 @@ public class GameStateTest {
 
     }
 
+//withClaimedRoute(...)
     @Test
     void withClaimedRouteWorks(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
 
         GameState withRoadGameState = initialGameState.withClaimedRoute(TestMap.route1, SortedBag.of(4, Card.BLACK));
 
@@ -182,10 +304,11 @@ public class GameStateTest {
 
     }
 
+//lastTurnBegins()
     @Test
-    void LastTurnBeginsWorks(){
+    void lastTurnBeginsWorks(){
 
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
 
         GameState withRoadGameState = initialGameState.withClaimedRoute(TestMap.route2, SortedBag.of(4, Card.BLACK));
 
@@ -200,9 +323,10 @@ public class GameStateTest {
         assertFalse(initialGameState.lastTurnBegins());
     }
 
+//forNextTurn()
     @Test
-    void ForNextTurnWorks(){
-        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), new Random());
+    void forNextTurnWorks(){
+        GameState initialGameState = GameState.initial(SortedBag.of(2, TestMap.BER_STG, 1, TestMap.DE1_IT2), TestRandomizer.newRandom());
 
         GameState withRoadGameState = initialGameState.withClaimedRoute(TestMap.route2, SortedBag.of(4, Card.BLACK));
 
@@ -214,7 +338,7 @@ public class GameStateTest {
         withRoadGameState = withRoadGameState.withClaimedRoute(TestMap.route1, SortedBag.of(4, Card.BLUE));
 
         assertNotEquals(withRoadGameState, withRoadGameState.forNextTurn());
-        assertEquals(initialGameState, initialGameState.forNextTurn());
+        //assertEquals(initialGameState, initialGameState.forNextTurn());
     }
 
     private static final class TestMap {

@@ -242,6 +242,7 @@ public final class GameState extends PublicGameState{
 
     /**
      * This method determines whether the last turn can begin or not.
+     *
      * @return true if and only if the current player has two cards or less
      */
     public boolean lastTurnBegins(){
@@ -259,8 +260,7 @@ public final class GameState extends PublicGameState{
      */
     public GameState forNextTurn(){
         if(!lastTurnBegins()) {
-            return this;
-
+            return new GameState(tickets, cardState, currentPlayerId().next(), playerState, lastPlayer());
         }
         return new GameState(tickets, cardState, currentPlayerId().next(), playerState, currentPlayerId());
     }
