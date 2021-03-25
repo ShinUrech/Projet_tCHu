@@ -8,9 +8,10 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *this class represents a game state with publicly available information
- * @author Shin Urech (327245)
+ * This class represents a game state with publicly available information.
  *
+ * @author Shin Urech (327245)
+ * @author Aidas Venckunas (325464)
  */
 
 public class PublicGameState {
@@ -22,14 +23,16 @@ public class PublicGameState {
     private final PlayerId lastPlayer;
 
     /**
-     * this is the public constructor for a publicGameState
-     * @param ticketsCount the # of thickets available in the ticket deck
-     * @param cardState public state of wagon and locmotives cars
+     * A public constructor for a public Game State.
+     *
+     * @param ticketsCount the number of tickets available in the ticket deck
+     * @param cardState public state of wagon and locomotives cars
      * @param currentPlayerId current player
      * @param playerState each publicPlayerState is linked to his Id
      * @param lastPlayer last player to play
-     * @throws IllegalArgumentException if ticketsCount is strictly negative or if playerState doesnt contain
-     * exactly 2 elements and NullPointerException if cardState or currentPlayerId is null
+     * @throws IllegalArgumentException if ticketsCount is strictly negative or if playerState does not contain
+     * exactly 2 elements
+     * @throws NullPointerException if cardState or currentPlayerId is null
      */
     public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer){
 
@@ -46,29 +49,27 @@ public class PublicGameState {
     }
 
     /**
-     * getter for the size of the ticket deck
-     * @return # of tickets still in the deck
+     * Returns the size of the ticket deck
+     * @return number of tickets still in the deck
      */
     public int ticketsCount(){
         return ticketsCount;
     }
 
     /**
-     * this method indicates whether players can draw tickets from the deck
-     * @return true if the deck is non empty and false otherwise
+     * This method indicates whether players can draw tickets from the deck.
+     * @return true if the deck of tickets is non empty and false otherwise
      */
     public boolean canDrawTickets(){
         if(ticketsCount == 0){
             return false;
 
-        }else {
-
-            return true;
         }
+        return true;
     }
 
     /**
-     * method that returns the publicCardState of the current game
+     * A method that returns the publicCardState of the current game.
      * @return the game's current publicCardState
      */
     public PublicCardState cardState(){
@@ -76,19 +77,18 @@ public class PublicGameState {
     }
 
     /**
-     * this method indicates if a player can draw a card
-     * @return false if there are less than 5 cards in the deck and the discard (added)
+     * This method indicates if a player can draw a card.
+     * @return false if there are less than 5 cards in the deck + the discard pile
      */
     public boolean canDrawCards(){
-        if(cardState.totalSize() < 5){
+        if(cardState.deckSize() + cardState.discardsSize() < 5){
             return false;
-        }else{
-            return true;
         }
+        return true;
     }
 
     /**
-     * this method returns the Id of the current player
+     * This method returns the Id of the current player.
      * @return the current player's Id
      */
     public PlayerId currentPlayerId(){
@@ -96,7 +96,7 @@ public class PublicGameState {
     }
 
     /**
-     * this method returns the PublicPlayerState of a given player
+     * This method returns the PublicPlayerState of a given player.
      * @param playerId the given player
      * @return the PublicPlayerState of playerId
      */
@@ -105,7 +105,7 @@ public class PublicGameState {
     }
 
     /**
-     * this method returns the PublicPlayerState of the current player
+     * This method returns the PublicPlayerState of the current player.
      * @return the PublicCardState of the current player
      */
     public PublicPlayerState currentPlayerState(){
@@ -113,30 +113,26 @@ public class PublicGameState {
     }
 
     /**
-     * this method returns a list of all claimed routes by either players
+     * This method returns a list of all claimed routes by either players.
      * @return a list of all claimed routes
      */
     public List<Route> claimedRoutes(){
 
         List<Route> list = new ArrayList<>();
 
-        for(Map.Entry<PlayerId, PublicPlayerState> entry: playerState.entrySet()){
-            list.addAll(playerState.get(entry).routes());
+        for(Map.Entry<PlayerId, PublicPlayerState> entry : playerState.entrySet()){
+            list.addAll(entry.getValue().routes());
         }
 
         return list;
     }
 
     /**
-     * this method returns the last player's Id
-     * @return null if the last player isnt known yet and lastPlayer if it is already defined
+     * This method returns the last player's Id.
+     * @return null if the last player is not known yet and lastPlayer if it is already defined.
      */
     public PlayerId lastPlayer(){
-        if(lastPlayer == null){
-            return null;
-        }else{
-            return lastPlayer;
-        }
+        return lastPlayer;
     }
 
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -81,7 +82,7 @@ public class PublicGameStateTest {
         var cardState = CardState.of(Deck.of(SortedBag.of(10, Card.YELLOW), TestRandomizer.newRandom()));
         playerState.put(PlayerId.PLAYER_1, PlayerState.initial(SortedBag.of(4, Card.LOCOMOTIVE)));
         playerState.put(PlayerId.PLAYER_2, PlayerState.initial(SortedBag.of(4, Card.LOCOMOTIVE)));
-        var expected = playerState;
+        var expected = Map.copyOf(playerState);
 
         var publicGameState = new PublicGameState(0, cardState, PlayerId.PLAYER_1, playerState, null);
         playerState.clear();
