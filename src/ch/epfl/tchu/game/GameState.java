@@ -236,8 +236,8 @@ public final class GameState extends PublicGameState{
      * @return a new game state with attributes modified
      */
     public GameState withClaimedRoute(Route route, SortedBag<Card> cards){
-        return new GameState(tickets, cardState, currentPlayerId(), changeRoute(currentPlayerId(), route, cards),
-                lastPlayer());
+        return new GameState(tickets, cardState.withMoreDiscardedCards(cards), currentPlayerId(),
+                changeRoute(currentPlayerId(), route, cards), lastPlayer());
     }
 
     /**
