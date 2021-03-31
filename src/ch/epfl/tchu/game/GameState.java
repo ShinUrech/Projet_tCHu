@@ -18,7 +18,9 @@ public final class GameState extends PublicGameState{
     private final Map<PlayerId, PlayerState> playerState;
 
     //private constructor for the class
-    private GameState(Deck<Ticket> tickets, CardState cardState, PlayerId currentPlayerId, Map<PlayerId, PlayerState> playerState, PlayerId lastPlayer){
+    private GameState(Deck<Ticket> tickets, CardState cardState, PlayerId currentPlayerId, Map<PlayerId,
+            PlayerState> playerState, PlayerId lastPlayer){
+
         super(tickets.size(), cardState, currentPlayerId, Map.copyOf(playerState), lastPlayer);
 
         this.tickets = tickets;
@@ -43,7 +45,6 @@ public final class GameState extends PublicGameState{
 
         PlayerId firstPlayer = PlayerId.ALL.get(rng.nextInt(2));
         PlayerId otherPlayer = firstPlayer.next();
-
 
         PlayerState firstPlayerState = PlayerState.initial(cardDeck.topCards(Constants.INITIAL_CARDS_COUNT));
         PlayerState otherPlayerState = PlayerState.initial(cardDeck.withoutTopCards(Constants.INITIAL_CARDS_COUNT)
@@ -253,7 +254,7 @@ public final class GameState extends PublicGameState{
     }
 
     /**
-     * This method returns a new game state that indicates that next turn is the last turn of the game.
+     * This method returns a new game state that is used for next turn.
      *
      * @return the new current player is the next of the current player and if it is the final turn the
      * current player becomes the final one
