@@ -214,7 +214,8 @@ public final class PlayerState extends PublicPlayerState{
      *
      * @return a list of all possible combinations of additional cards to use for a player
      */
-    public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards, SortedBag<Card> drawnCards){
+    public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards,
+                                                         SortedBag<Card> drawnCards){
 
         Preconditions.checkArgument(additionalCardsCount >=1 && additionalCardsCount <=3);
         Preconditions.checkArgument(!initialCards.isEmpty() && initialCards.toSet().size() <= 2);
