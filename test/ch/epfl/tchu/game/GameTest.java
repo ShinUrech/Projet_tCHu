@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 
 class GameTest {
+
     private static final class TestPlayer implements Player {
 
         private static final int TURN_LIMIT = 1000;
