@@ -1,12 +1,26 @@
 package ch.epfl.tchu.game;
 
 import ch.epfl.tchu.SortedBag;
+import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 class GameTest {
+
+    //its not finished yet but i did it for clarity's sake
+    TestPlayer player;
+    Map<PlayerId, Player> players;
+    Map<PlayerId, String> playeraNames;
+    SortedBag<Ticket> tickets;
+
+    //this method tests the game method. not finished either, just did it for myself
+    @Test
+    public void gameWorks(){
+        Game.play(players, playeraNames, tickets, player.rng);
+    }
 
     private static final class TestPlayer implements Player {
 
@@ -30,15 +44,18 @@ class GameTest {
             this.turnCounter = 0;
         }
 
+
         @Override
         public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
                 System.out.println("player has been initialised");
         }
 
+        //this method display's whether the info method works or not
         @Override
         public void receiveInfo(String info) {
             System.out.println("information transmitted");
         }
+
 
         @Override
         public void updateState(PublicGameState newState, PlayerState ownState) {
@@ -46,12 +63,14 @@ class GameTest {
             this.ownState = ownState;
         }
 
+        //this method adds the initial 5 tickets to the player's hand
         @Override
         public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
 
            ownState.withAddedTickets(tickets);
         }
 
+        //this method chooses randomly an amount of cards between 3 and 5. Picks the nth first slots no matter what
         @Override
         public SortedBag<Ticket> chooseInitialTickets() {
             SortedBag.Builder builder = new SortedBag.Builder();
@@ -66,6 +85,7 @@ class GameTest {
 
         }
 
+        //i didnt made this method but i assume it decides which kind of turn will be played next
         @Override
         public TurnKind nextTurn() {
             turnCounter += 1;
@@ -73,7 +93,7 @@ class GameTest {
                 throw new Error("Trop de tours joués !");
 
             // Détermine les routes dont ce joueur peut s'emparer
-            List<Route> claimableRoutes = /* ... */;
+            List<Route> claimableRoutes = this.claimableRoutes();
             if (claimableRoutes.isEmpty()) {
                 return TurnKind.DRAW_CARDS;
             } else {
@@ -87,29 +107,51 @@ class GameTest {
             }
         }
 
+
+        //this method randomly chooses a ticket from many options randomly
         @Override
         public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-            return null;
+            return SortedBag.of(options.get(rng.nextInt(options.size())));
         }
 
+        //this method returns a random slot index from which to pick a card
         @Override
         public int drawSlot() {
-            return 0;
+            return rng.nextInt(Constants.FACE_UP_CARDS_COUNT);
         }
 
+        //this method returns which route is going to be claimed by the player
         @Override
         public Route claimedRoute() {
-            return null;
+            return routeToClaim;
         }
 
+        //this method returns which cards will be used to claim a route
         @Override
         public SortedBag<Card> initialClaimCards() {
-            return null;
+            return initialClaimCards;
         }
 
+        //this method chooses a random option to claim a combination of cards
         @Override
         public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-            return null;
+            return options.get(rng.nextInt(options.size()));
+        }
+
+        private List<Route> claimableRoutes(){
+
+            ArrayList<Route> claimableRoutes = new ArrayList<>();
+
+            for(Route route : allRoutes){
+
+                if(ownState.canClaimRoute(route) && !ownState.routes().contains(route)){
+                    claimableRoutes.add(route);
+                }
+
+            }
+
+
+            return claimableRoutes;
         }
     }
 }
