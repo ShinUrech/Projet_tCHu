@@ -32,12 +32,12 @@ class GameTest {
 
         @Override
         public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-
+                System.out.println("player has been initialised");
         }
 
         @Override
         public void receiveInfo(String info) {
-
+            System.out.println("information transmitted");
         }
 
         @Override
@@ -49,11 +49,21 @@ class GameTest {
         @Override
         public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
 
+           ownState.withAddedTickets(tickets);
         }
 
         @Override
         public SortedBag<Ticket> chooseInitialTickets() {
-            return null;
+            SortedBag.Builder builder = new SortedBag.Builder();
+
+            int numberOfSelectedCards = rng.nextInt(3) + Constants.IN_GAME_TICKETS_COUNT;
+
+            for(int i = 0; i < numberOfSelectedCards; ++i){
+                builder.add(ownState.tickets().get(i));
+            }
+
+            return builder.build();
+
         }
 
         @Override
