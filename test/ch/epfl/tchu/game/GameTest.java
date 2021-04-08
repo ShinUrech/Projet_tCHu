@@ -3,23 +3,28 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.SortedBag;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 class GameTest {
-
-    //its not finished yet but i did it for clarity's sake
-    TestPlayer player;
-    Map<PlayerId, Player> players;
-    Map<PlayerId, String> playeraNames;
-    SortedBag<Ticket> tickets;
 
     //this method tests the game method. not finished either, just did it for myself
     @Test
     public void gameWorks(){
-        Game.play(players, playeraNames, tickets, player.rng);
+
+        TestPlayer player1 = new TestPlayer(5, ChMap.routes());
+        TestPlayer player2 = new TestPlayer(7, ChMap.routes());
+        Map<PlayerId, Player> players = new EnumMap<>(PlayerId.class);
+        Map<PlayerId, String> playersNames = new EnumMap<>(PlayerId.class);
+        List<Ticket> tickets = ChMap.tickets();
+
+        players.put(PlayerId.PLAYER_1, player1);
+        players.put(PlayerId.PLAYER_2, player2);
+
+        playersNames.put(PlayerId.PLAYER_1, "Shin");
+        playersNames.put(PlayerId.PLAYER_2, "Aidas");
+
+
+        Game.play(players, playersNames, SortedBag.of(tickets), player1.rng());
     }
 
     private static final class TestPlayer implements Player {
@@ -47,7 +52,7 @@ class GameTest {
 
         @Override
         public void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-                System.out.println("player has been initialised");
+            System.out.println("player has been initialised");
         }
 
         //this method display's whether the info method works or not
@@ -67,7 +72,7 @@ class GameTest {
         @Override
         public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
 
-           ownState.withAddedTickets(tickets);
+            ownState.withAddedTickets(tickets);
         }
 
         //this method chooses randomly an amount of cards between 3 and 5. Picks the nth first slots no matter what
@@ -153,7 +158,9 @@ class GameTest {
 
             return claimableRoutes;
         }
+
+        public Random rng(){
+            return rng;
+        }
     }
 }
-
-
