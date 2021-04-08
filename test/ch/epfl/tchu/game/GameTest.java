@@ -38,6 +38,7 @@ class GameTest {
         private int turnCounter;
         private PlayerState ownState;
         private PublicGameState gameState;
+        private SortedBag<Ticket> initial_5_tickets;
 
         // Lorsque nextTurn retourne CLAIM_ROUTE
         private Route routeToClaim;
@@ -58,7 +59,7 @@ class GameTest {
         //this method display's whether the info method works or not
         @Override
         public void receiveInfo(String info) {
-            System.out.println("information transmitted");
+            System.out.println(info);
         }
 
 
@@ -71,8 +72,7 @@ class GameTest {
         //this method adds the initial 5 tickets to the player's hand
         @Override
         public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
-
-            ownState.withAddedTickets(tickets);
+            initial_5_tickets = tickets;
         }
 
         //this method chooses randomly an amount of cards between 3 and 5. Picks the nth first slots no matter what
@@ -83,7 +83,7 @@ class GameTest {
             int numberOfSelectedCards = rng.nextInt(3) + Constants.IN_GAME_TICKETS_COUNT;
 
             for(int i = 0; i < numberOfSelectedCards; ++i){
-                builder.add(ownState.tickets().get(i));
+                builder.add(initial_5_tickets.get(i));
             }
 
             return builder.build();

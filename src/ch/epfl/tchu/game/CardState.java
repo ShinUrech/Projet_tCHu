@@ -3,6 +3,7 @@ package ch.epfl.tchu.game;
 import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -65,7 +66,7 @@ public final class CardState extends PublicCardState{
         checkIndex(slot,5);
         Preconditions.checkArgument(!deck.isEmpty());
 
-        List<Card> newFaceUpCards = faceUpCards;
+        List<Card> newFaceUpCards = new ArrayList<>(faceUpCards);
         newFaceUpCards.set(slot, deck.topCard());
         Deck<Card> newDeck = deck.withoutTopCard();
 

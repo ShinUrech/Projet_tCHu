@@ -32,7 +32,6 @@ public final class StationPartition implements StationConnectivity {
     public boolean connected(Station s1,Station s2){
 
        if((s1.id() >= stationPartition.length || s2.id() >= stationPartition.length )) {
-           System.out.println(s1.name() + " " + s2.name());
            return s1.id() == s2.id();
        }
 

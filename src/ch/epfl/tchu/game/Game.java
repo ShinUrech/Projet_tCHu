@@ -97,8 +97,10 @@ public final class Game {
 
             sendUpdate(gameState, players);
 
+            Player.TurnKind nextTurn = currentPlayer.nextTurn();
+
             //A kind of player's turn
-            switch (currentPlayer.nextTurn()){
+            switch (nextTurn){
 
                 case DRAW_TICKETS:
 
@@ -111,6 +113,8 @@ public final class Game {
                                     topTickets(Constants.IN_GAME_TICKETS_COUNT), choice);
 
                     sendInfo(current_info.keptTickets(choice.size()), players);
+
+                    break;
 
                 case DRAW_CARDS:
 
@@ -145,6 +149,8 @@ public final class Game {
                         gameState = gameState.withDrawnFaceUpCard(choice2);
                     }
 
+                    break;
+
                 case CLAIM_ROUTE:
 
                     //firstly player chooses a route and lays initialClaimCards
@@ -160,8 +166,8 @@ public final class Game {
                         SortedBag.Builder <Card> builder = new SortedBag.Builder<>();
 
                         for(int i = 0; i < Constants.ADDITIONAL_TUNNEL_CARDS; ++i){
-                            builder.add(gameState.topCard());
                             gameState = gameState.withCardsDeckRecreatedIfNeeded(rng);
+                            builder.add(gameState.topCard());
                             gameState = gameState.withoutTopCard();
 
                         }
@@ -205,11 +211,8 @@ public final class Game {
                         sendInfo(current_info.claimedRoute(route, cards), players);
                         gameState = gameState.withClaimedRoute(route, cards);
                     }
-            }
 
-            ///End of the game
-            if(gameState.lastTurnBegins()){
-                sendInfo(current_info.lastTurnBegins(gameState.currentPlayerState().carCount()), players);
+                    break;
             }
 
             if(gameState.currentPlayerId().equals(gameState.lastPlayer())){
@@ -230,6 +233,11 @@ public final class Game {
                 }
 
                 break;
+            }
+
+            ///End of the game
+            if(gameState.lastTurnBegins()){
+                sendInfo(current_info.lastTurnBegins(gameState.currentPlayerState().carCount()), players);
             }
 
             gameState = gameState.forNextTurn();
@@ -256,11 +264,18 @@ public final class Game {
     private static boolean hasAdditionalCardsNeeded(int additionalCardsCount, SortedBag <Card> cards,
                 SortedBag <Card> additionalDrawnCards, GameState gameState){
 
+
+
         List<SortedBag<Card>> all_possibilities = gameState.currentPlayerState().
                         possibleAdditionalCards(additionalCardsCount,cards, additionalDrawnCards);
 
-        List <SortedBag<Card>> player_possibilities = new ArrayList<>(gameState.currentPlayerState().cards().
-                    difference(cards).subsetsOfSize(additionalCardsCount));
+        SortedBag<Card> available_cards = gameState.currentPlayerState().cards().difference(cards);
+
+        if(additionalCardsCount > available_cards.size()){
+            return false;
+        }
+
+        List <SortedBag<Card>> player_possibilities = new ArrayList<>(available_cards.subsetsOfSize(additionalCardsCount));
 
         for(SortedBag <Card> possibility : all_possibilities){
             for(SortedBag <Card> player_possibility : player_possibilities){
