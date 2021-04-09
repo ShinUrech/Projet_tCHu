@@ -67,6 +67,20 @@ class GameTest {
         public void updateState(PublicGameState newState, PlayerState ownState) {
             this.gameState = newState;
             this.ownState = ownState;
+            System.out.println("Current GameState : ");
+            System.out.println("Card deck size : " + this.gameState.cardState().deckSize());
+            System.out.println("Ticket deck size : " + this.gameState.ticketsCount());
+            System.out.println("Discards' size : " + this.gameState.cardState().discardsSize());
+            System.out.println("Face up Cards : " + this.gameState.cardState().faceUpCards());
+            System.out.println();
+
+            System.out.println("Player state of player : ");
+            System.out.println("tickets count : " + this.ownState.tickets().size());
+            System.out.println("cards in its hand : " + this.ownState.cards().size());
+            System.out.println("cars count : " + this.ownState.carCount());
+            System.out.println("points : " + this.ownState.claimPoints());
+            System.out.println("final points : " + this.ownState.finalPoints());
+            System.out.println();
         }
 
         //this method adds the initial 5 tickets to the player's hand
