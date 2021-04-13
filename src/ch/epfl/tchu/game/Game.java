@@ -48,7 +48,7 @@ public final class Game {
         }
 
         //sending info about who will play first
-        if(gameState.currentPlayerId() == PlayerId.PLAYER_1){
+        if(gameState.currentPlayerId().equals(PlayerId.PLAYER_1)){
             sendInfo(info_Player1.willPlayFirst(), players);
         }
         else sendInfo(info_Player2.willPlayFirst(), players);
@@ -56,7 +56,7 @@ public final class Game {
         //distributing the tickets players initially receive
         for(Map.Entry<PlayerId, Player> entry : players.entrySet()) {
 
-            if(entry.getKey() == PlayerId.PLAYER_1){
+            if(entry.getKey().equals(PlayerId.PLAYER_1)){
                 entry.getValue().setInitialTicketChoice(gameState.topTickets(Constants.INITIAL_TICKETS_COUNT));
             }
             else{
@@ -119,8 +119,8 @@ public final class Game {
                 case DRAW_CARDS:
 
                     //first choice
-                    int choice1 = currentPlayer.drawSlot();
                     gameState = gameState.withCardsDeckRecreatedIfNeeded(rng);
+                    int choice1 = currentPlayer.drawSlot();
 
                     if(choice1 == Constants.DECK_SLOT){
 
@@ -136,8 +136,8 @@ public final class Game {
                     sendUpdate(gameState, players);
 
                     //second choice
-                    int choice2 = currentPlayer.drawSlot();
                     gameState = gameState.withCardsDeckRecreatedIfNeeded(rng);
+                    int choice2 = currentPlayer.drawSlot();
 
                     if(choice2 == Constants.DECK_SLOT){
 
@@ -187,24 +187,23 @@ public final class Game {
                                     .possibleAdditionalCards(additionalCardsCount,cards, additionalDrawnCards));
 
                             //if a player chooses any cards, we add a route to a player
-                            if(!chosenAdditionalCards.equals(SortedBag.of())){
-
+                            if(chosenAdditionalCards.size() != 0){
                                 sendInfo(current_info.claimedRoute(route, cards.union(chosenAdditionalCards)), players);
-                                gameState = gameState.withMoreDiscardedCards(additionalDrawnCards);
                                 gameState = gameState.withClaimedRoute(route, cards.union(chosenAdditionalCards));
                             }
                             else{
-                                gameState = gameState.withMoreDiscardedCards(additionalDrawnCards);
                                 sendInfo(current_info.didNotClaimRoute(route), players);
                             }
                         }
                         else if(additionalCardsCount == 0){
 
                             sendInfo(current_info.claimedRoute(route, cards), players);
-                            gameState = gameState.withMoreDiscardedCards(additionalDrawnCards);
                             gameState = gameState.withClaimedRoute(route, cards);
                         }
-                        else sendInfo(current_info.didNotClaimRoute(route), players);
+                        else{
+                            sendInfo(current_info.didNotClaimRoute(route), players);
+                        }
+                        gameState = gameState.withMoreDiscardedCards(additionalDrawnCards);
                     }
                     //if it is an overground route..
                     else{
