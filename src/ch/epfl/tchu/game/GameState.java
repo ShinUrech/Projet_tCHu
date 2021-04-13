@@ -263,7 +263,12 @@ public final class GameState extends PublicGameState{
         if(!lastTurnBegins()) {
             return new GameState(tickets, cardState, currentPlayerId().next(), playerState, lastPlayer());
         }
-        return new GameState(tickets, cardState, currentPlayerId().next(), playerState, currentPlayerId());
+        else if(lastTurnBegins() && lastPlayer() == null) {
+            return new GameState(tickets, cardState, currentPlayerId().next(), playerState, currentPlayerId());
+        }
+        else{
+            return new GameState(tickets, cardState, currentPlayerId().next(), playerState, lastPlayer());
+        }
     }
 
 
