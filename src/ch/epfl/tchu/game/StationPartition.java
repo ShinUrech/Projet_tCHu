@@ -80,17 +80,7 @@ public final class StationPartition implements StationConnectivity {
 
             partitionBuilder[representative(s1.id())] = representative(s2.id());
 
-            boolean flat = false;
-
-            while(!flat){
-                flat = true;
-                for(int i = 0; i < partitionBuilder.length; ++i){
-                    if(representative(representative(i)) != representative(i)) {
-                        flat = false;
-                        partitionBuilder[i] = representative(representative(i));
-                    }
-                }
-            }
+            flatten();
 
             return this;
         }
@@ -102,6 +92,13 @@ public final class StationPartition implements StationConnectivity {
          */
         public StationPartition build(){
 
+            flatten();
+
+            return new StationPartition(partitionBuilder);
+        }
+
+        private void flatten(){
+
             boolean flat = false;
 
             while(!flat){
@@ -113,9 +110,7 @@ public final class StationPartition implements StationConnectivity {
                     }
                 }
             }
-
-            return new StationPartition(partitionBuilder);
         }
-    }
 
+    }
 }

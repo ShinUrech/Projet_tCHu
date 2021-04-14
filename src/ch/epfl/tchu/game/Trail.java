@@ -30,7 +30,7 @@ public final class Trail {
      * routes in player's possession.
      *
      * returns a longest trail.
-     * @return longest trail.
+     * @return a longest trail
      */
     public static Trail longest(List<Route> routes){
 
@@ -107,7 +107,7 @@ public final class Trail {
 
     /**
      * Returns a length of a trail.
-     * @return a length of a trail.
+     * @return a length of a trail
      */
     public int length(){
         return length;
@@ -115,7 +115,7 @@ public final class Trail {
 
     /**
      * Returns the first station of a trail.
-     * @return the first station of a trail.
+     * @return the first station of a trail
      */
     public Station station1(){
         return station1;
@@ -123,7 +123,7 @@ public final class Trail {
 
     /**
      * Returns the last station of a trail.
-     * @return the last station of a trail.
+     * @return the last station of a trail
      */
     public Station station2(){
         return station2;
@@ -132,7 +132,7 @@ public final class Trail {
     /**
      * Overrides a method toString to make a textual representation of a trail.
      *
-     * @return a textual representation of a trail.
+     * @return a textual representation of a trail
      */
     @Override
     public String toString(){

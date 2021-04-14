@@ -7,13 +7,16 @@ import java.util.Map;
 
 /**
  * A class that represents a Player and its' behavior.
+ *
+ * @author Aidas Venckunas (325464)
+ * @author Shin Urech (327245)
  */
 public interface Player {
 
     /**
      * Enumerator for 3 different types of turns.
      */
-    public enum TurnKind {
+    enum TurnKind {
 
         DRAW_TICKETS,
         DRAW_CARDS,
@@ -28,23 +31,23 @@ public interface Player {
     /**
      * This method is used to communicate to the players their own Ids as well as the other players names.
      *
-     * @param ownId is the player's Id
-     * @param playerNames is the other players names
+     * @param ownId the player's Id
+     * @param playerNames the players' names
      */
     public abstract void initPlayers(PlayerId ownId, Map<PlayerId, String> playerNames);
 
     /**
      * This method communicates whatever information to a player.
      *
-     * @param info is the information that needs to be communicated
+     * @param info the information that needs to be communicated
      */
     public abstract void receiveInfo(String info);
 
     /**
      * This method gives game update information to the player.
      *
-     * @param newState is the new PublicGameState
-     * @param ownState is the new PlayerState of a given player
+     * @param newState the new PublicGameState
+     * @param ownState the new PlayerState of a given player
      */
     public abstract void updateState(PublicGameState newState, PlayerState ownState);
 
@@ -71,7 +74,7 @@ public interface Player {
      * This method is called whenever a player decides to pick a ticket and it gives the player all options he has
      * to pick a ticket.
      *
-     * @param options are the tickets that can be picked by the player
+     * @param options the tickets that can be picked by the player
      *
      * @return choice
      */
@@ -104,11 +107,9 @@ public interface Player {
      * This method is used whenever a player is trying to claim a tunnel and needs to choose which
      * additional card he is going to use.
      *
-     * @param options are the options available to claim the tunnel
+     * @param options the options available to claim the tunnel
      *
      * @return the cards picked by the player to claim the tunnel
      */
     public abstract SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options);
-
-
 }

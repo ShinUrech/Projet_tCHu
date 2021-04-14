@@ -23,6 +23,10 @@ public enum PlayerId {
      */
     public static final int COUNT = ALL.size();
 
+    /**
+     * Returns next player's ID.
+     * @return next player's ID.
+     */
     public PlayerId next(){
         if(this.ordinal() < COUNT - 1) {
             return ALL.get(this.ordinal() + 1);
@@ -30,5 +34,4 @@ public enum PlayerId {
            return ALL.get(0);
         }
     }
-
 }

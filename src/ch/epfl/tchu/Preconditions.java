@@ -4,7 +4,6 @@ package ch.epfl.tchu;
  * method that simplifies the testing of preconditions.
  *
  * @author Shin Urech (327245)
- *
  */
 public final class Preconditions {
 
@@ -23,6 +22,5 @@ public final class Preconditions {
         if(!shouldBeTrue){
             throw new IllegalArgumentException();
         }
-
     }
 }

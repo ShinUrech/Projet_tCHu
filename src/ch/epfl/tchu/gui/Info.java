@@ -22,10 +22,10 @@ public final class Info {
     private final String playerName;
 
     /**
-     * this public constructor is used to initialise the player name that is used to
+     * A public constructor that is used to initialise the player name that is used to
      * create specific textual instances.
      *
-     * @param playerName is the name of the player in question.
+     * @param playerName the name of the player in question
      */
     public Info(String playerName){
         this.playerName = playerName;
@@ -34,10 +34,10 @@ public final class Info {
     /**
      * This method returns a card's name (adds an s if count > 1).
      *
-     * @param card is the type of card we want to display
-     * @param count is the multiplicity of the card in question
+     * @param card the type of card we want to display
+     * @param count the multiplicity of the card in question
      *
-     * @return a string with the card's name (adds an s if there are more than one card).
+     * @return a string with the card's name (adds an s if there are more than one card)
      */
     public static String cardName(Card card, int count){
         String string = colorByType(card) + StringsFr.plural(count);
@@ -77,8 +77,8 @@ public final class Info {
      * This method gives back a String that consists of a list of all players that collected a given nb of points
      * (count points for instance).
      *
-     * @param playerNames is the list of all names of players that got count points
-     * @param points is the number of points in question
+     * @param playerNames the list of all names of players that got count points
+     * @param points the number of points in question
      *
      * @return a string that displays all player's names and the number of points they all got in common
      */
@@ -97,7 +97,7 @@ public final class Info {
     /**
      * This method returns a sentence which indicates the number of tickets a player decides to keep.
      *
-     * @param count the nb of tickets a player decides to keep
+     * @param count the number of tickets a player decides to keep
      *
      * @return a sentence that tells which player kept how many cards
      */
@@ -116,7 +116,7 @@ public final class Info {
     /**
      * This method announces the number of tickets which have been drawn by a given player.
      *
-     * @param count is the nb of tickets that have been drawn by a certain player
+     * @param count the number of tickets that have been drawn by a certain player
      *
      * @return a string that tells which player has drawn how many cards
      */
@@ -137,7 +137,7 @@ public final class Info {
      *
      * @param card the type of card that has been drawn
      *
-     * @return a string that tells whiich player drew which type of card
+     * @return a string that tells which player drew what type of card
      */
     public String drewVisibleCard(Card card){
         return String.format(StringsFr.DREW_VISIBLE_CARD, this.playerName, colorByType(card));
@@ -146,10 +146,10 @@ public final class Info {
     /**
      * This method tells whichever route have been claimed by whichever player with whichever cards.
      *
-     * @param route is the claimed route
-     * @param cards is the set of cards that have been used to claim the route
+     * @param route the claimed route
+     * @param cards the set of cards that have been used to claim the route
      *
-     * @return a sentence that says exactly what i said in the first line
+     * @return a sentence that announces the claimed route and the set of cards that have been used to claim the route
      */
     public String claimedRoute(Route route, SortedBag<Card> cards){
         return String.format(StringsFr.CLAIMED_ROUTE, this.playerName, route.station1().toString() +
@@ -159,10 +159,10 @@ public final class Info {
     /**
      * This method announces whenever a player is trying to claim a tunnel with a certain combination of cards.
      *
-     * @param route is the tunnel that is being claimed
-     * @param initialCards is the combination of cards used to attempt to claim it
+     * @param route the tunnel that is being claimed
+     * @param initialCards the combination of cards used to attempt to claim it
      *
-     * @return a sentence that announces which player claims which tunnel with which combination of cards
+     * @return a sentence that announces which player tries to claim which tunnel with which combination of cards
      */
     public String attemptsTunnelClaim(Route route, SortedBag<Card> initialCards){
         return String.format(StringsFr.ATTEMPTS_TUNNEL_CLAIM, this.playerName, route.station1().toString() +
@@ -181,10 +181,11 @@ public final class Info {
      */
     public String drewAdditionalCards(SortedBag<Card> drawnCards, int additionalCost){
         String statement;
-        switch(additionalCost){
-            case 0: statement = StringsFr.NO_ADDITIONAL_COST;
-                break;
-            default: statement = String.format(StringsFr.SOME_ADDITIONAL_COST, additionalCost, StringsFr.plural(additionalCost));
+        if(additionalCost == 0){
+            statement = StringsFr.NO_ADDITIONAL_COST;
+        }
+        else{
+            statement = String.format(StringsFr.SOME_ADDITIONAL_COST, additionalCost, StringsFr.plural(additionalCost));
         }
         return String.format(StringsFr.ADDITIONAL_CARDS_ARE, drawSortedBag(drawnCards))+ statement;
 
@@ -193,7 +194,7 @@ public final class Info {
     /**
      * This method announces that a certain player did not claim a route.
      *
-     * @param route is the route that was not claimed
+     * @param route the route that was not claimed
      *
      * @return gives back a statement that tells which player didn't claim which route.
      */
@@ -218,7 +219,7 @@ public final class Info {
     /**
      * This method announces that a certain player gets a longest trail bonus.
      *
-     * @param longestTrail is the longest trail in question
+     * @param longestTrail the longest trail in question
      *
      * @return a statement that announces which player gets a bonus for which trail
      */

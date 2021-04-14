@@ -82,7 +82,6 @@ public final class Game {
         sendUpdate(gameState, players);
 
         ///The game begins
-
         do{
 
             Player currentPlayer = players.get(gameState.currentPlayerId());
@@ -149,7 +148,6 @@ public final class Game {
                         sendInfo(current_info.drewVisibleCard(gameState.cardState().faceUpCard(choice2)), players);
                         gameState = gameState.withDrawnFaceUpCard(choice2);
                     }
-
                     break;
 
                 case CLAIM_ROUTE:
@@ -212,7 +210,6 @@ public final class Game {
                         sendInfo(current_info.claimedRoute(route, cards), players);
                         gameState = gameState.withClaimedRoute(route, cards);
                     }
-
                     break;
             }
 

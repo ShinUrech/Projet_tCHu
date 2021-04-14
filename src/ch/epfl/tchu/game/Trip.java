@@ -40,7 +40,6 @@ public final class Trip {
 
         Preconditions.checkArgument(points > 0);
         this.points = points;
-
     }
 
     /**
@@ -58,7 +57,7 @@ public final class Trip {
      * is not strictly positive.
      *
      * Returns a list of all possible trips.
-     * @return a List of all trips.
+     * @return a list of all trips
      */
     public static List<Trip> all(List<Station> from, List<Station> to, int points){
 
@@ -72,7 +71,6 @@ public final class Trip {
         }
 
         return allTrips;
-
     }
 
     /**
@@ -115,7 +113,5 @@ public final class Trip {
             return points;
         }
         else return points * -1;
-
     }
-
 }

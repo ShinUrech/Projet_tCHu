@@ -48,8 +48,7 @@ public final class Station {
     }
 
     /**
-     * Overrides the toString method so that it
-     * returns the name of a station.
+     * Overrides the toString method so that it returns the name of a station.
      * @return the name of a station
      */
     @Override

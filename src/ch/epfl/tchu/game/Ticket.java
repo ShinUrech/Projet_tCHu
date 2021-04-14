@@ -26,6 +26,7 @@ public final class Ticket implements Comparable<Ticket> {
     public Ticket(List<Trip> trips){
 
         Preconditions.checkArgument(!trips.isEmpty());
+
         for(Trip a : trips){
             Preconditions.checkArgument(a.from().toString().equals(trips.get(0).from().toString()));
         }
@@ -50,7 +51,7 @@ public final class Ticket implements Comparable<Ticket> {
 
     /**
      * Returns a textual representation of a ticket.
-     * @return Returns a textual representation of a ticket.
+     * @return a textual representation of a ticket
      */
     public String text(){
         return text;
@@ -110,7 +111,7 @@ public final class Ticket implements Comparable<Ticket> {
     }
 
     /**
-     * a method that compares the textual length of two tickets.
+     * A method that compares the textual length of two tickets.
      *
      * @param that
      * a ticket that we want our ticket to be compared to.
@@ -123,8 +124,7 @@ public final class Ticket implements Comparable<Ticket> {
     }
 
     /**
-     *  Overrides the toString method so that it
-     *  returns the textual representation of a ticket.
+     * Overrides the toString method so that it returns the textual representation of a ticket.
      * @return the textual representation of a ticket
      */
     @Override
