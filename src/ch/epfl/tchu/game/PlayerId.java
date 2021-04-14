@@ -28,8 +28,8 @@ public enum PlayerId {
      * @return next player's ID.
      */
     public PlayerId next(){
-        if(this.ordinal() < COUNT - 1) {
-            return ALL.get(this.ordinal() + 1);
+        if(this.ordinal() == 0) {
+            return ALL.get(1);
         }else{
            return ALL.get(0);
         }

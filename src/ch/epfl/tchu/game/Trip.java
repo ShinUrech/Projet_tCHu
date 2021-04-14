@@ -52,6 +52,7 @@ public final class Trip {
      * @param to
      * a list of arrival stations.
      * @param points
+     * points given for a trip.
      *
      * @throws IllegalArgumentException if one of the lists is empty, or if the number of points
      * is not strictly positive.
