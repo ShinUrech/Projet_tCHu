@@ -411,6 +411,7 @@ class StationPartitionTest {
             if (at != 0) trips.addAll(Trip.all(from, AT, at));
             if (it != 0) trips.addAll(Trip.all(from, IT, it));
             if (fr != 0) trips.addAll(Trip.all(from, FR, fr));
+
             return new Ticket(trips);
         }
         //endregion

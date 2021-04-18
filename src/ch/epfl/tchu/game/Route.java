@@ -180,7 +180,6 @@ public final class Route {
                     for(int a = length; a >= 0; a--){
                         possibilities.add(SortedBag.of(a, Card.of(color), length - a, Card.LOCOMOTIVE));
                     }
-                    return possibilities;
                 }
                 else{
 
@@ -192,8 +191,8 @@ public final class Route {
                     }
                     possibilities.add(SortedBag.of(length, Card.LOCOMOTIVE));
 
-                    return possibilities;
                 }
+                return possibilities;
 
 
         }

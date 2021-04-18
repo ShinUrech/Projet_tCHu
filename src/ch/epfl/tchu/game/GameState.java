@@ -196,7 +196,7 @@ public final class GameState extends PublicGameState{
     }
 
     /**
-     * This method returns an an identical state to the receiver except that the face-up
+     * This method returns an identical state to the receiver except that the face-up
      * card at the given location has been placed in the current player's hand
      * and replaced by the one at the top of the draw pile.
      *

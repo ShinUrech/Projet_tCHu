@@ -32,6 +32,7 @@ public final class Game {
     public static void play(Map<PlayerId, Player> players, Map<PlayerId, String> playerNames,
                             SortedBag<Ticket> tickets, Random rng){
 
+        Boolean lastTurnBegan = false;
         Preconditions.checkArgument(players.size() == 2 && playerNames.size() == 2);
 
         GameState gameState = GameState.initial(tickets, rng);
@@ -133,6 +134,7 @@ public final class Game {
 
                     }
 
+
                     sendUpdate(gameState, players);
 
                     //second choice
@@ -148,7 +150,6 @@ public final class Game {
                         sendInfo(current_info.drewVisibleCard(gameState.cardState().faceUpCard(choice2)), players);
                         gameState = gameState.withDrawnFaceUpCard(choice2);
                     }
-
                     break;
 
                 case CLAIM_ROUTE:
@@ -237,9 +238,10 @@ public final class Game {
             ///End of the game
             if(gameState.lastTurnBegins()){
                 sendInfo(current_info.lastTurnBegins(gameState.currentPlayerState().carCount()), players);
-            }
 
-            gameState = gameState.forNextTurn();
+            }else {
+                gameState = gameState.forNextTurn();
+            }
 
         }while(true);
     }
