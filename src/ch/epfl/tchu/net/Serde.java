@@ -1,6 +1,7 @@
 package ch.epfl.tchu.net;
 
 import java.time.chrono.IsoEra;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -46,18 +47,27 @@ public interface Serde<E extends MessageId> {
         };
     }
 
-    static <T extends Enum> Serde oneOf(List<T> list){
+    static <T extends Enum> Serde oneOf(List<T> listAll){
         return new Serde() {
             @Override
             public String serialize(MessageId messageId) {
-                return null;
+
+                ArrayList<String> listOfEnum = new ArrayList<>();
+                    for(T element: listAll){
+                        listOfEnum.add(String.valueOf(element.ordinal()));
+                    }
+
+                    return String.join(",", listOfEnum);
             }
 
             @Override
             public MessageId deserialize(String string) {
+
+
                 return null;
             }
         }
+
     }
 
 
