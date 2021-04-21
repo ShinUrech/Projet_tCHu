@@ -67,12 +67,12 @@ public class PublicCardState {
      * @return the card we asked for at the given index
      */
     public Card faceUpCard(int slot){
-        checkIndex(slot, 5);
+        checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
         return faceUpCards.get(slot);
     }
 
     /**
-     * This method gives back the deck's size.
+     * This method returns the deck's size.
      * @return the deck size
      */
     public int deckSize(){
@@ -98,5 +98,4 @@ public class PublicCardState {
     public int discardsSize(){
         return discardsSize;
     }
-
 }

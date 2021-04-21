@@ -52,8 +52,7 @@ public enum Card {
     /**
      * This method returns the type of card according to which color we choose.
      *
-     * @param color
-     * a chosen color.
+     * @param color a chosen color
      *
      * @return the type of card of the selected color
      *
@@ -106,7 +105,7 @@ public enum Card {
 
     /**
      * Returns the color of a chosen card.
-     * @return the color of a card.
+     * @return the color of a card
      */
     public Color color(){
         return cardColor;

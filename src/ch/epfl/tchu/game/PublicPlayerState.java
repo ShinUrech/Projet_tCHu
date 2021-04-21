@@ -19,12 +19,12 @@ public class PublicPlayerState {
     private final int carCount;
 
     /**
-     * This is the public constructor for the public player state.
+     * The public constructor for the public player state.
      *
-     * @param ticketCount is the amount of tickets a player owns
-     * @param cardCount is the amount of cards a player owns
+     * @param ticketCount the amount of tickets a player owns
+     * @param cardCount the amount of cards a player owns
      * @throws IllegalArgumentException if the ticket or card count is negative
-     * @param routes is the list of all claimed routes by the player
+     * @param routes the list of all claimed routes by the player
      */
     public PublicPlayerState(int ticketCount, int cardCount, List<Route> routes){
 
@@ -40,7 +40,7 @@ public class PublicPlayerState {
 
     /**
      * This method returns the amount of tickets the player has.
-     * @return an int that is the amount of tickets left on a players hand
+     * @return the amount of tickets left on a players hand
      */
     public int ticketCount(){
         return ticketCount;
@@ -48,7 +48,7 @@ public class PublicPlayerState {
 
     /**
      * This method returns the amount of cards the player has.
-     * @return an int that is the amount of tickets left on a player's hand
+     * @return the amount of tickets left on a player's hand
      */
     public int cardCount(){
         return cardCount;
@@ -82,20 +82,20 @@ public class PublicPlayerState {
 
 
     private int getClaimPoints(List<Route> routes){
-        int TOTAL_CLAIMPOINTS = 0;
+        int totalClaimPoints = 0;
         for(Route route: routes){
-            TOTAL_CLAIMPOINTS += route.claimPoints();
+            totalClaimPoints += route.claimPoints();
         }
-        return TOTAL_CLAIMPOINTS;
+        return totalClaimPoints;
     }
 
     private int getCarCount(List<Route> routes){
 
-        int TOTAL_LENGTH = 0;
+        int totalLength = 0;
 
         for(Route route: routes){
-            TOTAL_LENGTH  += route.length();
+            totalLength += route.length();
         }
-        return Constants.INITIAL_CAR_COUNT - TOTAL_LENGTH;
+        return Constants.INITIAL_CAR_COUNT - totalLength;
     }
 }

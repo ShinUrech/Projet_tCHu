@@ -23,7 +23,7 @@ public final class Deck<C extends Comparable<C>> {
      * This class creates and Shuffles the deck of cards.
      *
      * @param cards a SortedBag containing all cards needed to play the game
-     * @param rng this is the key to randomise the deck shuffle
+     * @param rng the key to randomise the deck shuffle
      * @param <C> generic type of the content of the deck
      *
      * @return a shuffled deck
@@ -89,12 +89,11 @@ public final class Deck<C extends Comparable<C>> {
     /**
      * This method gives back a sortedBag that contains a given number of top elements from the DECK.
      *
-     * @param count is the number of cards we want to get from the top of the DECK
+     * @param count the number of cards we want to get from the top of the DECK
      * @throws IllegalArgumentException if the count is not within the bounds
      *
      * @return a new sortedBag with only the count th first cards in the DECK
      */
-
     public SortedBag<C> topCards(int count){
 
        checkCount(count);
@@ -115,7 +114,6 @@ public final class Deck<C extends Comparable<C>> {
      *
      * @return newly created Deck
      */
-
     public Deck<C> withoutTopCards(int count){
 
         checkCount(count);
@@ -127,7 +125,6 @@ public final class Deck<C extends Comparable<C>> {
         }
 
        return newDeck;
-
     }
 
     private void checkCount(int count){

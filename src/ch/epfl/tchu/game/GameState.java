@@ -31,8 +31,8 @@ public final class GameState extends PublicGameState{
     /**
      * This class is a GameState initializer. It creates a the initial GameState at the very start of a game of tCHu.
      *
-     * @param tickets is the set of tickets that are going to be used during the game
-     * @param rng is a random parameter
+     * @param tickets the set of tickets that are going to be used during the game
+     * @param rng a random parameter
      *
      * @return a new GameState that is the initial one
      */
@@ -82,7 +82,7 @@ public final class GameState extends PublicGameState{
     /**
      * This method returns a given number of tickets on the top of the tickets deck.
      *
-     * @param count is the number of tickets we want to take
+     * @param count the number of tickets we want to take
      * @throws IllegalArgumentException if count is < 0, or > size of the deck
      *
      * @return a SortedBag of top tickets
@@ -162,8 +162,8 @@ public final class GameState extends PublicGameState{
     /**
      * This method returns a new GameState with some tickets added to a certain player's CardState.
      *
-     * @param playerId is the player which will receive the tickets
-     * @param chosenTickets are the tickets the chosen player will get
+     * @param playerId the player which will receive the tickets
+     * @param chosenTickets the tickets the chosen player will get
      * @throws IllegalArgumentException if the given player already has a ticket
      *
      * @return a new GameState with tickets added to the player's CardState
@@ -180,8 +180,8 @@ public final class GameState extends PublicGameState{
      * This method returns a new GameState that is identical to the input except that the current player has chosen
      * additional tickets.
      *
-     * @param drawnTickets are the tickets that are being drawn from the ticket deck
-     * @param chosenTickets are the tickets chosen by the current player to be kept
+     * @param drawnTickets the tickets that are being drawn from the ticket deck
+     * @param chosenTickets the tickets chosen by the current player to be kept
      * @throws IllegalArgumentException if the chosen tickets arent contained in the drawn ones
      *
      * @return a new GameState with new tickets added to the current player's hand
@@ -200,7 +200,7 @@ public final class GameState extends PublicGameState{
      * card at the given location has been placed in the current player's hand
      * and replaced by the one at the top of the draw pile.
      *
-     * @param slot is the slot of the card that has been picked
+     * @param slot the slot of the card that has been picked
      * @throws IllegalArgumentException if it is not possible to draw cards
      *
      * @return new game state with a new face-up card and a new card on the player's hand
@@ -257,13 +257,15 @@ public final class GameState extends PublicGameState{
      * This method returns a new game state that is used for next turn.
      *
      * @return the new current player is the next of the current player and if it is the final turn the
-     * current player becomes the final one
+     * current player becomes the lastPlayer
      */
     public GameState forNextTurn(){
-        if(!lastTurnBegins()) {
+        if(!lastTurnBegins() || (lastTurnBegins() && lastPlayer() != null)) {
             return new GameState(tickets, cardState, currentPlayerId().next(), playerState, lastPlayer());
         }
-        return new GameState(tickets, cardState, currentPlayerId().next(), playerState, currentPlayerId());
+        else{
+            return new GameState(tickets, cardState, currentPlayerId().next(), playerState, currentPlayerId());
+        }
     }
 
 

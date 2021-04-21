@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * This class represents a game state with publicly available information.
+ * This class represents a Game State with publicly available information.
  *
  * @author Shin Urech (327245)
  * @author Aidas Venckunas (325464)
@@ -34,7 +34,8 @@ public class PublicGameState {
      * exactly 2 elements
      * @throws NullPointerException if cardState or currentPlayerId is null
      */
-    public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId, PublicPlayerState> playerState, PlayerId lastPlayer){
+    public PublicGameState(int ticketsCount, PublicCardState cardState, PlayerId currentPlayerId, Map<PlayerId,
+            PublicPlayerState> playerState, PlayerId lastPlayer){
 
         Preconditions.checkArgument(ticketsCount >= 0 && playerState.size() == 2);
         if(cardState == null || currentPlayerId == null){
@@ -129,11 +130,9 @@ public class PublicGameState {
 
     /**
      * This method returns the last player's Id.
-     * @return null if the last player is not known yet and lastPlayer if it is already defined.
+     * @return null if the last player is not known yet and lastPlayer if it is already defined
      */
     public PlayerId lastPlayer(){
         return lastPlayer;
     }
-
-
 }

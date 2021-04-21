@@ -28,7 +28,6 @@ public final class CardState extends PublicCardState{
         super(FaceUpCards, deck.size(), discards.size());
 
         this.faceUpCards = FaceUpCards;
-
         this.deck = deck;
         this.discards = discards;
     }
@@ -37,7 +36,7 @@ public final class CardState extends PublicCardState{
      * This method creates the initial card setup with 5 cards that are drawn from the top of the pile
      * to be exposed to the players.
      *
-     * @param deck is the game deck
+     * @param deck the game deck
      * @throws IllegalArgumentException if the deck size is less than 5
      *
      * @return a new card state which has 5 "face-up cards", the card deck without the 5 public cards
@@ -46,7 +45,8 @@ public final class CardState extends PublicCardState{
 
     public static CardState of(Deck<Card> deck){
         Preconditions.checkArgument(deck.size() >= 5);
-        return new CardState(deck.withoutTopCards(5), SortedBag.of(), deck.topCards(5).toList());
+        return new CardState(deck.withoutTopCards(Constants.FACE_UP_CARDS_COUNT), SortedBag.of(),
+                deck.topCards(Constants.FACE_UP_CARDS_COUNT).toList());
 
     }
 
@@ -54,7 +54,7 @@ public final class CardState extends PublicCardState{
      * This method draws a card from the 5 public cards on a given index and replaces it with the top
      * card from the deck.
      *
-     * @param slot is the slot of the card we choose from the 5 "public" cards
+     * @param slot the slot of the card we choose from the 5 "public" cards
      * @throws NullPointerException if slot is not within the bounds
      * @throws IllegalArgumentException if the deck is empty
      *
@@ -63,7 +63,7 @@ public final class CardState extends PublicCardState{
 
     public CardState withDrawnFaceUpCard(int slot){
 
-        checkIndex(slot,5);
+        checkIndex(slot, Constants.FACE_UP_CARDS_COUNT);
         Preconditions.checkArgument(!deck.isEmpty());
 
         List<Card> newFaceUpCards = new ArrayList<>(faceUpCards);
@@ -100,7 +100,7 @@ public final class CardState extends PublicCardState{
     /**
      * This method returns a new CardState made out of all the discards.
      *
-     * @param rng is a random parameter for a fair shuffle
+     * @param rng a random parameter for a fair shuffle
      * @throws IllegalArgumentException if the deck is not empty
      *
      * @return a new CardState made out of all previously disposed cards
@@ -124,9 +124,5 @@ public final class CardState extends PublicCardState{
         builder.add(this.discards);
 
         return new CardState(this.deck, builder.build(), this.faceUpCards());
-
     }
-
-
-
 }

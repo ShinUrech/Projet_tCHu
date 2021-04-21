@@ -83,8 +83,8 @@ public final class Game {
         sendUpdate(gameState, players);
 
         ///The game begins
-
         do{
+
             Player currentPlayer = players.get(gameState.currentPlayerId());
             Info current_info;
 
@@ -178,6 +178,8 @@ public final class Game {
 
                         sendInfo(current_info.drewAdditionalCards(additionalDrawnCards, additionalCardsCount), players);
 
+                        gameState = gameState.withMoreDiscardedCards(additionalDrawnCards);
+
                         //if additional cards count is positive and player has additional cards needed..
                         if(additionalCardsCount > 0 && hasAdditionalCardsNeeded(additionalCardsCount, cards,
                                 additionalDrawnCards, gameState)){
@@ -204,14 +206,12 @@ public final class Game {
                         else{
                             sendInfo(current_info.didNotClaimRoute(route), players);
                         }
-                        gameState = gameState.withMoreDiscardedCards(additionalDrawnCards);
                     }
                     //if it is an overground route..
                     else{
                         sendInfo(current_info.claimedRoute(route, cards), players);
                         gameState = gameState.withClaimedRoute(route, cards);
                     }
-
                     break;
             }
 
@@ -236,6 +236,7 @@ public final class Game {
             }
 
             ///End of the game
+
             if(gameState.lastTurnBegins()){
                 sendInfo(current_info.lastTurnBegins(gameState.currentPlayerState().carCount()), players);
 

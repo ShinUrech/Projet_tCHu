@@ -117,21 +117,20 @@ public final class PlayerState extends PublicPlayerState{
      */
     public boolean canClaimRoute(Route route){
 
-        boolean answer = false;
-
         if(carCount() < route.length()){
             return false;
         }
         else{
+
             List<SortedBag<Card>> availablePossibilities = possibleClaimCards(route);
 
             for (SortedBag<Card> a : route.possibleClaimCards()){
                 if(availablePossibilities.contains(a)){
-                    answer = true;
+                    return true;
                 }
             }
         }
-        return answer;
+        return false;
     }
 
     /**
@@ -139,7 +138,7 @@ public final class PlayerState extends PublicPlayerState{
      * to claim a given route.
      *
      * @param route a given route
-     * @throws IllegalArgumentException a player has less cars left than a route length requires to
+     * @throws IllegalArgumentException if a player has less cars left than a route length requires to
      *
      * @return a list of all possible combinations of cards.
      */
@@ -157,7 +156,6 @@ public final class PlayerState extends PublicPlayerState{
 
                     if(cards.contains(SortedBag.of(route.length(), Card.of(route.color()))))
                         possibilities.add(SortedBag.of(route.length(), Card.of(route.color())));
-                    return possibilities;
                 }
                 else{
 
@@ -165,9 +163,8 @@ public final class PlayerState extends PublicPlayerState{
                         if(cards.contains(SortedBag.of(route.length(), b)))
                             possibilities.add(SortedBag.of(route.length(), b));
                     }
-
-                    return possibilities;
                 }
+                return possibilities;
 
             case UNDERGROUND:
 
@@ -179,7 +176,6 @@ public final class PlayerState extends PublicPlayerState{
                             possibilities.add(SortedBag.of(a, Card.of(route.color()),
                                     route.length() - a, Card.LOCOMOTIVE));
                     }
-                    return possibilities;
                 }
                 else{
 
@@ -193,9 +189,8 @@ public final class PlayerState extends PublicPlayerState{
 
                     if(cards.contains(SortedBag.of(route.length(), Card.LOCOMOTIVE)))
                         possibilities.add(SortedBag.of(route.length(), Card.LOCOMOTIVE));
-
-                    return possibilities;
                 }
+                return possibilities;
         }
         return null;
     }
@@ -206,9 +201,11 @@ public final class PlayerState extends PublicPlayerState{
      *
      * @param additionalCardsCount a number of additional cards required
      * @throws IllegalArgumentException if the number is less than one or bigger than three
+     *
      * @param initialCards initially used player's cards
      * @throws IllegalArgumentException if there are no initially used cards or there are more than two suits
      * of cards used initially
+     *
      * @param drawnCards three cards that have been drawn
      * @throws IllegalArgumentException if the number of drawn cards is not equal to three
      *
@@ -217,7 +214,8 @@ public final class PlayerState extends PublicPlayerState{
     public List<SortedBag<Card>> possibleAdditionalCards(int additionalCardsCount, SortedBag<Card> initialCards,
                                                          SortedBag<Card> drawnCards){
 
-        Preconditions.checkArgument(additionalCardsCount >=1 && additionalCardsCount <=3);
+        Preconditions.checkArgument(additionalCardsCount >= 1
+                && additionalCardsCount <= Constants.ADDITIONAL_TUNNEL_CARDS);
         Preconditions.checkArgument(!initialCards.isEmpty() && initialCards.toSet().size() <= 2);
         Preconditions.checkArgument(drawnCards.size() == Constants.ADDITIONAL_TUNNEL_CARDS);
 

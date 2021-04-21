@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class to express the different routes a player can take
+ * A class to express the different routes a player can take.
  *
  * @author Aidas Venckunas (325464)
  */
@@ -22,7 +22,7 @@ public final class Route {
     private final Color color;
 
     /**
-     * enum for the different ground levels a route can have (either overground or underground).
+     * Enum for the different ground levels a route can have (either overground or underground).
      */
     public enum Level{
 
@@ -65,12 +65,11 @@ public final class Route {
         this.length = length;
         this.level = level;
         this.color = color;
-
     }
 
     /**
      * Returns id of a route.
-     * @return id of a route.
+     * @return id of a route
      */
     public String id(){
         return id;
@@ -78,7 +77,7 @@ public final class Route {
 
     /**
      * Returns station1.
-     * @return station1.
+     * @return station1
      */
     public Station station1(){
         return station1;
@@ -86,7 +85,7 @@ public final class Route {
 
     /**
      * Returns station2.
-     * @return station2.
+     * @return station2
      */
     public Station station2(){
         return station2;
@@ -94,7 +93,7 @@ public final class Route {
 
     /**
      * Returns the length of a route.
-     * @return the length of a route.
+     * @return the length of a route
      */
     public int length(){
         return length;
@@ -102,7 +101,7 @@ public final class Route {
 
     /**
      * Returns the level of a route.
-     * @return the level of a route.
+     * @return the level of a route
      */
     public Level level(){
         return level;
@@ -110,7 +109,7 @@ public final class Route {
 
     /**
      * Returns the route's color.
-     * @return the route's color.
+     * @return the route's color
      */
     public Color color(){
         return color;
@@ -118,7 +117,7 @@ public final class Route {
 
     /**
      * Returns the pair of stations that make up a route.
-     * @return the pair of stations that make up a route.
+     * @return the pair of stations that make up a route
      */
     public List<Station> stations(){
         return List.of(station1, station2);
@@ -130,10 +129,9 @@ public final class Route {
      *
      * @param station
      * the given station.
-     *
-     * @return the opposite station on a give route.
-     *
      * @throws IllegalArgumentException if the input does not correspond to any station of the route.
+     *
+     * @return the opposite station of this route
      */
     public Station stationOpposite(Station station) {
 
@@ -150,7 +148,7 @@ public final class Route {
     /**
      * Method that calculates all possible combinations of cards that can be used to claim a route.
      *
-     * @return List of all possible combinations of cards to claim a route.
+     * @return List of all possible combinations of cards to claim a route
      */
     public List<SortedBag<Card>> possibleClaimCards(){
 
@@ -162,16 +160,14 @@ public final class Route {
 
                 if(color != null){
                     possibilities.add(SortedBag.of(length, Card.of(color)));
-                    return possibilities;
                 }
                 else{
 
                     for(Card b : Card.CARS){
                         possibilities.add(SortedBag.of(length, b));
                     }
-
-                    return possibilities;
                 }
+                return possibilities;
 
             case UNDERGROUND:
 
@@ -190,11 +186,8 @@ public final class Route {
                         }
                     }
                     possibilities.add(SortedBag.of(length, Card.LOCOMOTIVE));
-
                 }
                 return possibilities;
-
-
         }
         return null;
     }
@@ -209,7 +202,7 @@ public final class Route {
      * @throws IllegalArgumentException if level of a route is OVERGROUND or if a number of additionally
      * drawn cards is not equal to 3.
      *
-     * @return the number of additional claim cards needed to claim a tunnel.
+     * @return the number of additional claim cards needed to claim a tunnel
      */
     public int additionalClaimCardsCount(SortedBag<Card> claimCards, SortedBag<Card> drawnCards){
 
@@ -237,7 +230,7 @@ public final class Route {
      * Method that returns the amount of points a player gets for claiming a route according
      * to the route's length.
      *
-     * @return number of points given for a claim.
+     * @return number of points given for a claim
      */
     public int claimPoints(){
         return Constants.ROUTE_CLAIM_POINTS.get(length);

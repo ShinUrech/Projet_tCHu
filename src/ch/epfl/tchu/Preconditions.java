@@ -1,18 +1,16 @@
 package ch.epfl.tchu;
 
 /**
- * method that simplifies the testing of preconditions.
+ * A class that simplifies the testing of preconditions.
  *
  * @author Shin Urech (327245)
- *
  */
 public final class Preconditions {
-
 
     private Preconditions(){}
 
     /**
-     * this method throws an exception if the inputted boolean statement returns false.
+     * This method throws an exception if the inputted boolean statement returns false.
      *
      * @param shouldBeTrue
      * the indication that should be correct.
@@ -23,6 +21,5 @@ public final class Preconditions {
         if(!shouldBeTrue){
             throw new IllegalArgumentException();
         }
-
     }
 }
