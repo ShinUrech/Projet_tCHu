@@ -10,7 +10,6 @@ public class Serdes {
 
     private Serdes(){};
 
-    public static final Serde<Integer> INTEGER_SERDE = Serde.of((Integer x, Byte[] y) -> Base64.getEncoder().encodeToString(x.toString().getBytes(StandardCharsets.UTF_8), Base64.getDecoder().decode(new String(y, StandardCharsets.UTF_8))));
-    
+
 
 }
