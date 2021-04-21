@@ -1,10 +1,17 @@
 package ch.epfl.tchu.net;
 
+import ch.epfl.tchu.Preconditions;
+import ch.epfl.tchu.SortedBag;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Pattern;
+import ch.epfl.tchu.SortedBag;
+import ch.epfl.tchu.game.Card;
 
 public interface Serde<T> {
+
 
     abstract String serialize(T t);
 
@@ -28,31 +35,67 @@ public interface Serde<T> {
         };
    }
 
-   static <T extends Enum> Serde<List<T>> oneOf(List<T> list){
-       return new Serde<List<T>>() {
+  static <T> Serde<T> oneOf(List<T> list){
+
+       return new Serde<T>() {
+
            @Override
-           public String serialize(List<T> ts) {
-               return String.join(",", Serde.listToStringForEnum(ts));
+           public String serialize(T t) {
+               return Integer.toString(list.indexOf(t));
            }
 
            @Override
-           public List<T> deserialize(String string) {
-               return List.of(T.values());
+           public T deserialize(String string) {
+               return list.get(Integer.parseInt(string));
            }
        };
    }
 
-   private static <T extends Enum>String[] listToStringForEnum(List<T> list){
-       String[] toStringList = new String[list.size()];
+   static <T> Serde<List<T>> listOf(Serde<T> serde, Character separator) {
 
-       for(T element: list){
-           toStringList[element.ordinal()] = Integer.toString(element.ordinal());
-       }
+       return new Serde<List<T>>() {
 
-       return toStringList;
+           @Override
+           public String serialize(List<T> ts) {
+
+               ArrayList<String> elementsArray = new ArrayList<>();
+
+                   for (T element : ts) {
+                       elementsArray.add(serde.serialize(element));
+                   }
+                   return String.join(separator.toString(), elementsArray);
+
+           }
+
+
+           @Override
+           public List<T> deserialize(String string) {
+
+               ArrayList<T> deserialized = new ArrayList<>();
+
+               String[] splittedString = string.split(Pattern.quote(separator.toString()), -1);
+
+               for (String element : splittedString) {
+                   deserialized.add(serde.deserialize(element));
+               }
+
+               return deserialized;
+           }
+       };
+
    }
 
+   static <T extends Comparable<T>> Serde<SortedBag<T>> bagOf(Serde<List<T>> serde, Character separator){
+       return new Serde<SortedBag<T>>() {
+           @Override
+           public String serialize(SortedBag<T> sortedBag) {
+               return serde.serialize(sortedBag.toList());
+           }
 
-
-
+           @Override
+           public SortedBag<T> deserialize(String string) {
+               return SortedBag.of(serde.deserialize(string));
+           }
+       };
+   }
 }
