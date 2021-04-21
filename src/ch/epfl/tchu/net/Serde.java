@@ -85,16 +85,16 @@ public interface Serde<T> {
 
    }
 
-   static <T extends Comparable<T>> Serde<SortedBag<T>> bagOf(Serde<List<T>> serde, Character separator){
+   static <T extends Comparable<T>> Serde<SortedBag<T>> bagOf(Serde<T> serde, Character separator){
        return new Serde<SortedBag<T>>() {
            @Override
            public String serialize(SortedBag<T> sortedBag) {
-               return serde.serialize(sortedBag.toList());
+               return Serde.listOf(serde, separator).serialize(sortedBag.toList());
            }
 
            @Override
            public SortedBag<T> deserialize(String string) {
-               return SortedBag.of(serde.deserialize(string));
+               return SortedBag.of(Serde.listOf(serde, separator).deserialize(string));
            }
        };
    }

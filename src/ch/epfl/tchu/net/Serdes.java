@@ -1,5 +1,6 @@
 package ch.epfl.tchu.net;
 
+import ch.epfl.tchu.SortedBag;
 import ch.epfl.tchu.game.*;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +13,11 @@ public class Serdes {
 
     public static final Serde<Integer> INTEGER_SERDE = Serde.of(x -> x.toString(), Integer::parseInt);
 
-    public static final Serde<String> STRING_SERDE = Serde.of(x -> Base64.getEncoder().encodeToString(x.getBytes(StandardCharsets.UTF_8)), y -> new String(Base64.getDecoder().decode(y), StandardCharsets.UTF_8));
+    public static final Serde<String> STRING_SERDE = Serde.of(
+
+            toEncode -> Base64.getEncoder().encodeToString(toEncode.getBytes(StandardCharsets.UTF_8)),
+
+            toDecode -> new String(Base64.getDecoder().decode(toDecode), StandardCharsets.UTF_8));
 
     public static final Serde<PlayerId> PLAYER_ID_SERDE = Serde.oneOf(PlayerId.ALL);
 
@@ -26,5 +31,19 @@ public class Serdes {
 
     public static final Serde<List<String>> STRING_LIST_SERDE = Serde.listOf(STRING_SERDE, ',');
 
-    public static final Serde<List<Card>> CARD_LIST_SERDE = Serde.listOf(Serde.bagOf(CARD_SERDE,',' ), ';')
+    public static final Serde<List<Card>> CARD_LIST_SERDE = Serde.listOf(CARD_SERDE, ',');
+
+    public static final Serde<List<Route>> ROUTE_LIST_SERDE = Serde.listOf(ROUTE_SERDE, ',');
+
+    public static final Serde<SortedBag<Card>> CARD_SORTEDBAG_SERDE = Serde.bagOf(CARD_SERDE, ',');
+
+    public static final Serde<SortedBag<Ticket>> TICKET_SORTEDBAG_SERDE = Serde.bagOf(TICKET_SERDE, ',');
+
+    public static final Serde<List<SortedBag<Card>>> CARD_SORTEDBAG_LIST_SERDE = Serde.listOf(CARD_SORTEDBAG_SERDE, ';');
+
+    public static final Serde<PublicCardState> PUBLIC_CARD_STATE_SERDE = Serde.of(
+
+            toSerialize -> Serde.listOf(STRING_SERDE, ';').serialize(List.of(CARD_LIST_SERDE.serialize(toSerialize.faceUpCards()), INTEGER_SERDE.serialize(toSerialize.deckSize()), INTEGER_SERDE.serialize(toSerialize.discardsSize()))),
+
+            );
 }
