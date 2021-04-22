@@ -8,7 +8,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-public class Serdes {
+public final class Serdes {
 
     private Serdes(){};
 
@@ -103,10 +103,12 @@ public class Serdes {
                     INTEGER_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(0)),
                     PUBLIC_CARD_STATE_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(1)),
                     PLAYER_ID_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(2)),
+
                     Map.of(
                             PlayerId.PLAYER_1, PUBLIC_PLAYER_STATE_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(3)),
 
-                            PlayerId.PLAYER_2, PUBLIC_PLAYER_STATE_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(4))),
+                            PlayerId.PLAYER_2, PUBLIC_PLAYER_STATE_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(4))
+                    ),
 
                     PLAYER_ID_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(5))
 
