@@ -6,6 +6,7 @@ import ch.epfl.tchu.game.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 public class Serdes {
 
@@ -45,5 +46,71 @@ public class Serdes {
 
             toSerialize -> Serde.listOf(STRING_SERDE, ';').serialize(List.of(CARD_LIST_SERDE.serialize(toSerialize.faceUpCards()), INTEGER_SERDE.serialize(toSerialize.deckSize()), INTEGER_SERDE.serialize(toSerialize.discardsSize()))),
 
-            );
+            toDeserialize -> new PublicCardState(
+
+                    CARD_LIST_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialize).get(0)),
+
+                    INTEGER_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialize).get(1)),
+
+                    INTEGER_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialize).get(2))
+            ));
+
+    public static final Serde<PublicPlayerState> PUBLIC_PLAYER_STATE_SERDE = Serde.of(
+
+            toSerialize -> Serde.listOf(STRING_SERDE, ';').serialize(List.of(INTEGER_SERDE.serialize(toSerialize.ticketCount()), INTEGER_SERDE.serialize(toSerialize.cardCount()), ROUTE_LIST_SERDE.serialize(toSerialize.routes()))),
+
+            toDeserialize -> new PublicPlayerState(
+
+                    INTEGER_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialize).get(0)),
+
+                    INTEGER_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialize).get(1)),
+
+                    ROUTE_LIST_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialize).get(2))
+            )
+    );
+
+    public static final Serde<PlayerState> PLAYER_STATE_SERDE = Serde.of(
+
+            toSerialise -> Serde.listOf(STRING_SERDE, ';').serialize(List.of(
+
+                    TICKET_SORTEDBAG_SERDE.serialize(toSerialise.tickets()),
+                    CARD_SORTEDBAG_SERDE.serialize(toSerialise.cards()),
+                    ROUTE_LIST_SERDE.serialize(toSerialise.routes())
+            )),
+
+            toDeserialise -> new PlayerState(
+
+                    TICKET_SORTEDBAG_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialise).get(0)),
+                    CARD_SORTEDBAG_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialise).get(1)),
+                    ROUTE_LIST_SERDE.deserialize(Serde.listOf(STRING_SERDE, ';').deserialize(toDeserialise).get(2))
+            )
+    );
+
+    public static final Serde<PublicGameState> PUBLIC_GAME_STATE_SERDE = Serde.of(
+
+            toSerialise -> Serde.listOf(STRING_SERDE, ':').serialize(List.of(
+
+                    INTEGER_SERDE.serialize(toSerialise.ticketsCount()),
+                    PUBLIC_CARD_STATE_SERDE.serialize(toSerialise.cardState()),
+                    PLAYER_ID_SERDE.serialize(toSerialise.currentPlayerId()),
+                    PUBLIC_PLAYER_STATE_SERDE.serialize(toSerialise.playerState(PlayerId.PLAYER_1)),
+                    PUBLIC_PLAYER_STATE_SERDE.serialize(toSerialise.playerState(PlayerId.PLAYER_2)),
+                    PLAYER_ID_SERDE.serialize(toSerialise.lastPlayer())
+            )),
+
+            toDeserialize -> new PublicGameState(
+
+                    INTEGER_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(0)),
+                    PUBLIC_CARD_STATE_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(1)),
+                    PLAYER_ID_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(2)),
+                    Map.of(
+                            PlayerId.PLAYER_1, PUBLIC_PLAYER_STATE_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(3)),
+
+                            PlayerId.PLAYER_2, PUBLIC_PLAYER_STATE_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(4))),
+
+                    PLAYER_ID_SERDE.deserialize(Serde.listOf(STRING_SERDE, ':').deserialize(toDeserialize).get(5))
+
+            )
+
+    );
 }
