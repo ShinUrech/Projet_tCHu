@@ -4,6 +4,7 @@ import ch.epfl.tchu.Preconditions;
 import ch.epfl.tchu.SortedBag;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -26,17 +27,13 @@ public interface Serde<T> {
             @Override
             public String serialize(T t) {
 
-                if(t == null){
-                    return "";
-                } else return serializer.apply(t);
+                return serializer.apply(t);
             }
 
             @Override
             public T deserialize(String string) {
 
-                if(string.isEmpty()){
-                    return null;
-                }else return deserializer.apply(string);
+                return deserializer.apply(string);
             }
         };
    }
@@ -52,9 +49,11 @@ public interface Serde<T> {
 
            @Override
            public T deserialize(String string) {
+
                if(string.isEmpty()){
                    return null;
-               } else return list.get(Integer.parseInt(string));
+               }
+               return list.get(Integer.parseInt(string));
            }
        };
    }
@@ -85,14 +84,14 @@ public interface Serde<T> {
                if(!string.isEmpty()) {
                    ArrayList<T> deserialized = new ArrayList<>();
 
-                    String[] splittedString = string.split(Pattern.quote(separator.toString()), -1);
+                    String[] splitString = string.split(Pattern.quote(separator.toString()), -1);
 
-                     for (String element : splittedString) {
+                     for (String element : splitString) {
                         deserialized.add(serde.deserialize(element));
                      }
-
                      return deserialized;
-               } else return List.of();
+               }
+               else return List.of();
 
            }
        };
