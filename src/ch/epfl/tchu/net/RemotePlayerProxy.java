@@ -32,51 +32,104 @@ public class RemotePlayerProxy implements Player {
     @Override
     public void receiveInfo(String info) {
 
+        String message = MessageId.RECEIVE_INFO.name() + " " + Serdes.STRING_SERDE.serialize(info);
+
+        send(message);
     }
 
     @Override
     public void updateState(PublicGameState newState, PlayerState ownState) {
 
+        String message = MessageId.UPDATE_STATE.name() + " " + Serdes.PUBLIC_GAME_STATE_SERDE.serialize(newState) + " "
+                + Serdes.PLAYER_STATE_SERDE.serialize(ownState);
+
+        send(message);
     }
 
     @Override
     public void setInitialTicketChoice(SortedBag<Ticket> tickets) {
 
+        String message = MessageId.SET_INITIAL_TICKETS.name() + " " + Serdes.TICKET_SORTEDBAG_SERDE.serialize(tickets);
+
+        send(message);
     }
 
     @Override
     public SortedBag<Ticket> chooseInitialTickets() {
-        return null;
+
+        String message = MessageId.CHOOSE_INITIAL_TICKETS.name();
+
+        send(message);
+        String receivedMessage = read();
+
+        return Serdes.TICKET_SORTEDBAG_SERDE.deserialize(receivedMessage);
     }
 
     @Override
     public TurnKind nextTurn() {
-        return null;
+
+        String message = MessageId.NEXT_TURN.name();
+
+        send(message);
+        String receivedMessage = read();
+
+        return Serdes.TURN_KIND_SERDE.deserialize(receivedMessage);
     }
 
     @Override
     public SortedBag<Ticket> chooseTickets(SortedBag<Ticket> options) {
-        return null;
+
+        String message = MessageId.CHOOSE_TICKETS.name() + " " + Serdes.TICKET_SORTEDBAG_SERDE.serialize(options);
+
+        send(message);
+        String receivedMessage = read();
+
+        return Serdes.TICKET_SORTEDBAG_SERDE.deserialize(receivedMessage);
     }
 
     @Override
     public int drawSlot() {
-        return 0;
+
+        String message = MessageId.DRAW_SLOT.name();
+
+        send(message);
+        String receivedMessage = read();
+
+        return Serdes.INTEGER_SERDE.deserialize(receivedMessage);
     }
 
     @Override
     public Route claimedRoute() {
-        return null;
+
+        String message = MessageId.ROUTE.name();
+
+        send(message);
+        String receivedMessage = read();
+
+        return Serdes.ROUTE_SERDE.deserialize(receivedMessage);
     }
 
     @Override
     public SortedBag<Card> initialClaimCards() {
-        return null;
+
+        String message = MessageId.CARDS.name();
+
+        send(message);
+        String receivedMessage = read();
+
+        return Serdes.CARD_SORTEDBAG_SERDE.deserialize(receivedMessage);
     }
 
     @Override
     public SortedBag<Card> chooseAdditionalCards(List<SortedBag<Card>> options) {
-        return null;
+
+        String message = MessageId.CHOOSE_ADDITIONAL_CARDS.name() + " "
+                + Serdes.CARD_SORTEDBAG_LIST_SERDE.serialize(options);
+
+        send(message);
+        String receivedMessage = read();
+
+        return Serdes.CARD_SORTEDBAG_SERDE.deserialize(receivedMessage);
     }
 
     private void send(String message){
@@ -85,6 +138,16 @@ public class RemotePlayerProxy implements Player {
                 w.write(message);
                 w.write('\n');
                 w.flush();
+        }catch(IOException e){
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private String read(){
+        try{
+            BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream(), US_ASCII));
+
+            return r.readLine();
         }catch(IOException e){
             throw new UncheckedIOException(e);
         }
