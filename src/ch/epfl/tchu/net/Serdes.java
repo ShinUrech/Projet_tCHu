@@ -14,8 +14,14 @@ public final class Serdes {
 
     private Serdes(){};
 
+    /**
+     * this is a Serde for int type data
+     */
     public static final Serde<Integer> INTEGER_SERDE = Serde.of(integer -> integer.toString(), Integer::parseInt);
 
+    /**
+     * this is a Serde for String type data
+     */
     public static final Serde<String> STRING_SERDE = Serde.of(
 
             toEncode -> {
@@ -28,28 +34,64 @@ public final class Serdes {
                     ? new String(Base64.getDecoder().decode(toDecode.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8)
                     : "");
 
+    /**
+     * this is a Serde for PlayerId type data
+     */
     public static final Serde<PlayerId> PLAYER_ID_SERDE = Serde.oneOf(PlayerId.ALL);
 
+    /**
+     * this is a Serde for a Turnkind type data
+     */
     public static final Serde<Player.TurnKind> TURN_KIND_SERDE = Serde.oneOf(Player.TurnKind.ALL);
 
+    /**
+     * this is a Serde for a Card type data
+     */
     public static final Serde<Card> CARD_SERDE = Serde.oneOf(Card.ALL);
 
+    /**
+     * this is a Serde for a Route type data
+     */
     public static final Serde<Route> ROUTE_SERDE = Serde.oneOf(ChMap.routes());
 
+    /**
+     * this is a Serde for a Ticket type data
+     */
     public static final Serde<Ticket> TICKET_SERDE = Serde.oneOf(ChMap.tickets());
 
+    /**
+     * this is a Serde for a List of String type data
+     */
     public static final Serde<List<String>> STRING_LIST_SERDE = Serde.listOf(STRING_SERDE, ',');
 
+    /**
+     * this is a Serde for a List of Card type data
+     */
     public static final Serde<List<Card>> CARD_LIST_SERDE = Serde.listOf(CARD_SERDE, ',');
 
+    /**
+     * this is a Serde for a List of Route type data
+     */
     public static final Serde<List<Route>> ROUTE_LIST_SERDE = Serde.listOf(ROUTE_SERDE, ',');
 
+    /**
+     * this is a Serde for a SortedBag of Card type data
+     */
     public static final Serde<SortedBag<Card>> CARD_SORTEDBAG_SERDE = Serde.bagOf(CARD_SERDE, ',');
 
+    /**
+     * this is a Serde for a SortedBag of Ticket type data
+     */
     public static final Serde<SortedBag<Ticket>> TICKET_SORTEDBAG_SERDE = Serde.bagOf(TICKET_SERDE, ',');
 
+    /**
+     * this is a Serde for a List of SortedBag of Card type data
+     */
     public static final Serde<List<SortedBag<Card>>> CARD_SORTEDBAG_LIST_SERDE = Serde.listOf(CARD_SORTEDBAG_SERDE, ';');
 
+    /**
+     * this is a Serde for a PublicCardState type data
+     */
     public static final Serde<PublicCardState> PUBLIC_CARD_STATE_SERDE = Serde.of(
 
             toSerialize -> {
@@ -74,6 +116,9 @@ public final class Serdes {
                 return new PublicCardState(faceUpCards, deckSize, discardsSize);
             });
 
+    /**
+     * this is a Serde for a PublicPlayerState type data
+     */
     public static final Serde<PublicPlayerState> PUBLIC_PLAYER_STATE_SERDE = Serde.of(
 
             toSerialize -> {
@@ -99,6 +144,9 @@ public final class Serdes {
             }
     );
 
+    /**
+     * this is a Serde for a PlayerState type data
+     */
     public static final Serde<PlayerState> PLAYER_STATE_SERDE = Serde.of(
 
             toSerialise -> {
@@ -123,6 +171,9 @@ public final class Serdes {
             }
     );
 
+    /**
+     * this is a Serde for a PublicGameState type data
+     */
     public static final Serde<PublicGameState> PUBLIC_GAME_STATE_SERDE = Serde.of(
 
             toSerialise -> {
