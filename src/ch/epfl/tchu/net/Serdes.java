@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * A class for defining different types of Serdes that are used in the project.
+ *
+ * @author Shin Urech (327245)
+ */
 public final class Serdes {
 
     private Serdes(){};
@@ -40,7 +45,7 @@ public final class Serdes {
     public static final Serde<PlayerId> PLAYER_ID_SERDE = Serde.oneOf(PlayerId.ALL);
 
     /**
-     * this is a Serde for a Turnkind type data
+     * this is a Serde for a TurnKind type data
      */
     public static final Serde<Player.TurnKind> TURN_KIND_SERDE = Serde.oneOf(Player.TurnKind.ALL);
 
@@ -124,9 +129,9 @@ public final class Serdes {
             toSerialize -> {
                 ArrayList<String> listOfData = new ArrayList<>();
 
-                        listOfData.add(INTEGER_SERDE.serialize(toSerialize.ticketCount()));
-                        listOfData.add(INTEGER_SERDE.serialize(toSerialize.cardCount()));
-                        listOfData.add(ROUTE_LIST_SERDE.serialize(toSerialize.routes()));
+                listOfData.add(INTEGER_SERDE.serialize(toSerialize.ticketCount()));
+                listOfData.add(INTEGER_SERDE.serialize(toSerialize.cardCount()));
+                listOfData.add(ROUTE_LIST_SERDE.serialize(toSerialize.routes()));
 
 
                 return String.join(";", listOfData);
