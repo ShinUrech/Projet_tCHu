@@ -38,12 +38,14 @@ public class SedesTest {
     void playerIdSerdeWorksOnSerialization(){
         assertEquals( "0", Serdes.PLAYER_ID_SERDE.serialize(PlayerId.PLAYER_1));
         assertEquals( "1", Serdes.PLAYER_ID_SERDE.serialize(PlayerId.PLAYER_2));
+        assertEquals("", Serdes.PLAYER_ID_SERDE.serialize(null));
     }
 
     @Test
     void playerIdSerdeWorksOnDeserialization(){
         assertEquals( PlayerId.PLAYER_1, Serdes.PLAYER_ID_SERDE.deserialize("0"));
         assertEquals(PlayerId.PLAYER_2, Serdes.PLAYER_ID_SERDE.deserialize("1"));
+        assertEquals(null, Serdes.PLAYER_ID_SERDE.deserialize(""));
     }
 
 //TurnKind
@@ -143,8 +145,8 @@ public class SedesTest {
         assertEquals(List.of(), Serdes.STRING_LIST_SERDE.deserialize(""));
 
         //Non empty list
-        String data = "VGhlbw==,U2hpbg==,ZSBzIHAgYSBjIGU=,bm9tYnJlcyA2NQ==";
-        List<String> expected = List.of("Theo", "Shin", "e s p a c e", "nombres 65");
+        String data = "VGhlbw==,U2hpbg==,ZSBzIHAgYSBjIGU=,bm9tYnJlcyA2NQ==,";
+        List<String> expected = List.of("Theo", "Shin", "e s p a c e", "nombres 65", "");
         assertEquals(expected, Serdes.STRING_LIST_SERDE.deserialize(data));
     }
 
