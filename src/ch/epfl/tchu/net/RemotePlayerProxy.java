@@ -234,6 +234,7 @@ public class RemotePlayerProxy implements Player {
         }
     }
 
+
     private String read(){
         try{
             BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream(), US_ASCII));
