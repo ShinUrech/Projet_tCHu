@@ -11,5 +11,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="javaFx11" level="application" />
     <orderEntry type="library" name="org.junit.jupiter:junit-jupiter:5.7.0" level="project" />
+    <orderEntry type="library" name="javafx.web" level="project" />
   </component>
 </module>
