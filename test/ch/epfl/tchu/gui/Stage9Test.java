@@ -19,10 +19,11 @@ public final class Stage9Test extends Application {
     public void start(Stage primaryStage) {
 
         Node mapView = MapViewCreator.createMapView();
+        Node handView = DecksViewCreator.createHandView();
 
 
         BorderPane mainPane =
-                new BorderPane(mapView, null, null, null, null);
+                new BorderPane(mapView, null, null, handView, null);
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.show();
 
