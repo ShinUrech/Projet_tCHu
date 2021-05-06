@@ -240,9 +240,8 @@ public final class Game {
             if(gameState.lastTurnBegins()){
                 sendInfo(current_info.lastTurnBegins(gameState.currentPlayerState().carCount()), players);
 
-            }else {
-                gameState = gameState.forNextTurn();
             }
+            gameState = gameState.forNextTurn();
 
         }while(true);
     }
