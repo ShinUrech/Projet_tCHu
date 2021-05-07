@@ -21,6 +21,9 @@ public final class Stage9Test extends Application {
         Node mapView = MapViewCreator.createMapView();
         Node handView = DecksViewCreator.createHandView();
 
+        //uncomment the line below when you are finished writing the method createCardsView()
+        //Node cardsView = DecksViewCreator.createCardsView ();
+
 
         BorderPane mainPane =
                 new BorderPane(mapView, null, null, handView, null);

@@ -69,6 +69,23 @@ public class DecksViewCreator {
         return handView;
     }
 
+    public static Node createCardsView(){
+        /**
+         * to do for Shin
+         *
+         * You have to create the second graph from 3.5.1
+         * You can inspire from the method createHandsView, its almost the same ;)
+         *
+         * After that you can try to establish links and listeners in this method, after reading
+         * javafx pdf section 4.
+         *
+         * to do this you have to look at 3.5.2
+         *
+         * The properties will be defined in ObservableGameState, but this class is not written yet.
+         */
+        return null;
+    }
+
 
 
 }
