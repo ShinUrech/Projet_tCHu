@@ -1,91 +1,54 @@
 package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.game.Card;
+import ch.epfl.tchu.game.Color;
 import ch.epfl.tchu.game.PublicCardState;
-import ch.epfl.tchu.game.Ticket;
+import javafx.beans.property.DoubleProperty;
+import javafx.css.Style;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
-class DecksViewCreator {
+import java.util.Properties;
+
+public class DecksViewCreator {
+
+    private final int OUTSIDE_WIDTH = 60;
+    private final int OUTSIDE_HEIGHT = 90;
+    private final int INSIDE_FILLING_WIDTH = 40;
+    private final int INSIDE_FILLING_HEIGHT = 70;
+
 
     private DecksViewCreator(){};
 
-    public static Node createHandView(){
+    public Node creatHandView(ObservableGameState currentGameState){
 
-        HBox handView = new HBox();
-        handView.getStylesheets().add("decks.css");
-        handView.getStylesheets().add("colors.css");
+        Node base = new HBox();
+        base.getStyleClass().add("deck.css");
+        base.getStyleClass().add("colors.css");
 
-        ListView<Ticket> tickets = new ListView<>();
-        tickets.setId("tickets");
+        Node ticketList = new ListView<>(currentGameState.tickets());
 
-        HBox hand = new HBox();
-        hand.setId("hand-pane");
 
-        for(Card card : Card.ALL){
-
-            StackPane cardPane = new StackPane();
-            if(card == Card.LOCOMOTIVE){
-                cardPane.getStyleClass().add("NEUTRAL");
-            }
-            else cardPane.getStyleClass().add(card.color().name());
-            cardPane.getStyleClass().add("card");
-
-            Rectangle outside = new Rectangle();
-            outside.getStyleClass().add("outside");
-            outside.setHeight(90);
-            outside.setWidth(60);
-
-            Rectangle inside = new Rectangle();
-            inside.getStyleClass().add("inside");
-            inside.getStyleClass().add("filled");
-            inside.setHeight(70);
-            inside.setWidth(40);
-
-            Rectangle train = new Rectangle();
-            train.getStyleClass().add("train-image");
-            train.setHeight(70);
-            train.setWidth(40);
-
-            Text counter = new Text();
-            counter.getStyleClass().add("count");
-
-            cardPane.getChildren().add(outside);
-            cardPane.getChildren().add(inside);
-            cardPane.getChildren().add(train);
-            cardPane.getChildren().add(counter);
-
-            hand.getChildren().add(cardPane);
-        }
-
-        handView.getChildren().add(tickets);
-        handView.getChildren().add(hand);
-
-        return handView;
-    }
-
-    public static Node createCardsView(){
-        /**
-         * to do for Shin
-         *
-         * You have to create the second graph from 3.5.1
-         * You can inspire from the method createHandsView, its almost the same ;)
-         *
-         * After that you can try to establish links and listeners in this method, after reading
-         * javafx pdf section 4.
-         *
-         * to do this you have to look at 3.5.2
-         *
-         * The properties will be defined in ObservableGameState, but this class is not written yet.
-         */
         return null;
     }
 
+    private Node cardStackPaneGenerator(Card inputCard){
+        StackPane stackPane = new StackPane();
 
+        Style color;
+
+        Rectangle cardOutside = new Rectangle(OUTSIDE_WIDTH, OUTSIDE_HEIGHT);
+        cardOutside.setArcWidth(10);
+        cardOutside.setArcHeight(10);
+
+        Rectangle cardInside = new Rectangle(INSIDE_FILLING_WIDTH, INSIDE_FILLING_HEIGHT);
+        Rectangle locomotiveLogo = new Rectangle(INSIDE_FILLING_WIDTH, INSIDE_FILLING_HEIGHT);
+        locomotiveLogo.getStyle()
+
+    }
 
 }
