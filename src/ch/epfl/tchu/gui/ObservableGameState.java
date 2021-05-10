@@ -77,6 +77,7 @@ public class ObservableGameState {
                     if(a.station1().equals(route.station1()) && a.station2().equals(route.station2())
                             && !route.equals(a)){
                         canBeClaimed = false;
+                        break;
                     }
                 }
                 canSeize.get(ChMap.routes().indexOf(route)).set(canBeClaimed);
@@ -180,8 +181,8 @@ public class ObservableGameState {
         return cardsPercentage;
     }
 
-    public ReadOnlyObjectProperty<PlayerId> route(int index){
-        return routes.get(index);
+    public ReadOnlyObjectProperty<PlayerId> route(Route route){
+        return routes.get(ChMap.routes().indexOf(route));
     }
 
     public ReadOnlyIntegerProperty playersTickets(PlayerId player){
@@ -208,8 +209,8 @@ public class ObservableGameState {
         return cards.get(card);
     }
 
-    public ReadOnlyBooleanProperty canSeize(int index){
-        return canSeize.get(index);
+    public ReadOnlyBooleanProperty canSeize(Route route){
+        return canSeize.get(ChMap.routes().indexOf(route));
     }
 
     private Boolean canDrawTickets(){

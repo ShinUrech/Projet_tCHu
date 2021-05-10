@@ -1,7 +1,10 @@
 package ch.epfl.tchu.gui;
 
 import ch.epfl.tchu.game.ChMap;
+import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.Route;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -16,7 +19,8 @@ class MapViewCreator {
 
     private MapViewCreator(){};
 
-    public static Node createMapView(){
+    public static Node createMapView(ObservableGameState observableGameState,
+                 ObjectProperty<ActionHandlers.ClaimRouteHandler> claimRouteHP){
 
         Pane pane = new Pane();
         pane.getStylesheets().add("map.css");
@@ -30,6 +34,15 @@ class MapViewCreator {
         for(Route route : allRoutes){
 
             Group routeGroup = new Group();
+
+            ReadOnlyObjectProperty<PlayerId> routeProp = observableGameState.route(route);
+            if(routeProp != null) {
+                routeProp.addListener((property, o, n) ->
+                        routeGroup.getStyleClass().add(routeProp.getName()));
+            }
+            routeGroup.disableProperty().bind(
+                    claimRouteHP.isNull().or(observableGameState.canSeize(route).not()));
+
             routeGroup.getStyleClass().add("route");
             routeGroup.getStyleClass().add(route.level().name());
             if(route.color() == null){
@@ -37,6 +50,8 @@ class MapViewCreator {
             }
             else routeGroup.getStyleClass().add(route.color().name());
             routeGroup.setId(route.id());
+
+            System.out.println(routeGroup.getStyleClass());
 
             for(int i = 1; i <= route.length(); ++i){
                 Group caseGroup = new Group();
