@@ -65,12 +65,14 @@ public class ObservableGameState {
 
         for(Route route : ChMap.routes()){
             if(statePlayer1.routes().contains(route)){
+                //System.out.println("player1 has this route");
                 routes.get(ChMap.routes().indexOf(route)).set(PlayerId.PLAYER_1);
+                //System.out.println(routes.get(ChMap.routes().indexOf(route)));
             }
             else if(statePlayer2.routes().contains(route)){
                 routes.get(ChMap.routes().indexOf(route)).set(PlayerId.PLAYER_2);
             }
-            else if(currentPlayerState.equals(currentGameState.currentPlayerState())
+            else if(currentGameState.playerState(playerId).equals(currentGameState.currentPlayerState())
                     && currentPlayerState.canClaimRoute(route)){
                 Boolean canBeClaimed = true;
                 for(Route a : currentGameState.claimedRoutes()){
@@ -117,6 +119,7 @@ public class ObservableGameState {
         List<ObjectProperty<PlayerId>> routes = new ArrayList<ObjectProperty<PlayerId>>();
         for(Route a : ChMap.routes()){
             routes.add(new SimpleObjectProperty<PlayerId>());
+            //System.out.println(routes.get(ChMap.routes().indexOf(a)));
         }
         return routes;
     }
@@ -213,15 +216,15 @@ public class ObservableGameState {
         return canSeize.get(ChMap.routes().indexOf(route));
     }
 
-    private Boolean canDrawTickets(){
+    public Boolean canDrawTickets(){
         return currentGameState.canDrawTickets();
     }
 
-    private Boolean canDrawCards(){
+    public Boolean canDrawCards(){
         return currentGameState.canDrawCards();
     }
 
-    private List<SortedBag<Card>> possibleClaimCards(Route route){
+    public List<SortedBag<Card>> possibleClaimCards(Route route){
         return currentPlayerState.possibleClaimCards(route);
     }
 }

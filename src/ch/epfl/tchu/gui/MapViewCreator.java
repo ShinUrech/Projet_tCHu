@@ -1,5 +1,7 @@
 package ch.epfl.tchu.gui;
 
+import ch.epfl.tchu.SortedBag;
+import ch.epfl.tchu.game.Card;
 import ch.epfl.tchu.game.ChMap;
 import ch.epfl.tchu.game.PlayerId;
 import ch.epfl.tchu.game.Route;
@@ -7,6 +9,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -20,7 +23,7 @@ class MapViewCreator {
     private MapViewCreator(){};
 
     public static Node createMapView(ObservableGameState observableGameState,
-                 ObjectProperty<ActionHandlers.ClaimRouteHandler> claimRouteHP){
+                 ObjectProperty<ActionHandlers.ClaimRouteHandler> claimRouteHP, CardChooser cardChooser){
 
         Pane pane = new Pane();
         pane.getStylesheets().add("map.css");
@@ -36,12 +39,25 @@ class MapViewCreator {
             Group routeGroup = new Group();
 
             ReadOnlyObjectProperty<PlayerId> routeProp = observableGameState.route(route);
-            if(routeProp != null) {
-                routeProp.addListener((property, o, n) ->
-                        routeGroup.getStyleClass().add(routeProp.getName()));
-            }
+            System.out.println(routeProp);
+
             routeGroup.disableProperty().bind(
                     claimRouteHP.isNull().or(observableGameState.canSeize(route).not()));
+
+
+            ActionHandlers.ClaimRouteHandler claimRouteH = claimRouteHP.get();
+
+            routeGroup.setOnMouseClicked(e -> observableGameState.possibleClaimCards(route));
+            List<SortedBag<Card>> possibleClaimCards = observableGameState.possibleClaimCards(route);
+            if(possibleClaimCards.size() == 1) {
+               claimRouteH.onClaimRoute(route, possibleClaimCards.get(0));
+            }
+            else if(possibleClaimCards.size() > 1){
+                ActionHandlers.ChooseCardsHandler chooseCardsH =
+                        chosenCards -> claimRouteH.onClaimRoute(route, chosenCards);
+                cardChooser.chooseCards(possibleClaimCards, chooseCardsH);
+            }
+
 
             routeGroup.getStyleClass().add("route");
             routeGroup.getStyleClass().add(route.level().name());
@@ -72,13 +88,11 @@ class MapViewCreator {
                 wagonRect.setHeight(12);
 
                 Circle c1 = new Circle();
-                c1.getStyleClass().add("filled");
                 c1.setRadius(3);
                 c1.setCenterX(12);
                 c1.setCenterY(6);
 
                 Circle c2 = new Circle();
-                c2.getStyleClass().add("filled");
                 c2.setRadius(3);
                 c2.setCenterX(24);
                 c2.setCenterY(6);
@@ -93,8 +107,35 @@ class MapViewCreator {
                 routeGroup.getChildren().add(caseGroup);
             }
 
+            dumpTree(routeGroup);
+
+            observableGameState.route(route).addListener((property, o, n) ->
+                    routeGroup.getStyleClass().add(observableGameState.route(route).getName()));
+
             pane.getChildren().add(routeGroup);
         }
         return pane;
+    }
+
+    @FunctionalInterface
+    interface CardChooser {
+        void chooseCards(List<SortedBag<Card>> options, ActionHandlers.ChooseCardsHandler handler);
+    }
+
+    public static void dumpTree(Node root) {
+        dumpTree(0, root);
+    }
+
+    public static void dumpTree(int indent, Node root) {
+        System.out.printf("%s%s (id: %s, classes: [%s])%n",
+                " ".repeat(indent),
+                root.getTypeSelector(),
+                root.getId(),
+                String.join(", ", root.getStyleClass()));
+        if (root instanceof Parent) {
+            Parent parent = ((Parent) root);
+            for (Node child : parent.getChildrenUnmodifiable())
+                dumpTree(indent + 2, child);
+        }
     }
 }
